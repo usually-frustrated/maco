@@ -10,3 +10,6 @@ Use the other docs for product intent, locked architecture, and phase definition
 ## Logs
 
 - [Current Implementation Status](./implementation-status.md)
+- [Phase 4: System VPN Configuration Layer](./worklogs/2026-04-05-phase-4-system-vpn-config.md)
+- [Phase 5: Menu Bar Connection Controls And State](./worklogs/2026-04-05-phase-5-menu-bar-state.md)
+- [Phase 6: Packet Tunnel Startup Contract](./worklogs/2026-04-05-phase-6-packet-tunnel-startup.md)

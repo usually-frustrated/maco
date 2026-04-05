@@ -26,6 +26,26 @@ final class AppNotificationCenter {
         post(title: "Credentials Cleared", message: profileName)
     }
 
+    func notifyVPNConnecting(profileName: String) {
+        post(title: "VPN Connecting", message: profileName)
+    }
+
+    func notifyVPNConnected(profileName: String) {
+        post(title: "VPN Connected", message: profileName)
+    }
+
+    func notifyVPNDisconnecting(profileName: String) {
+        post(title: "VPN Disconnecting", message: profileName)
+    }
+
+    func notifyVPNDisconnected(profileName: String) {
+        post(title: "VPN Disconnected", message: profileName)
+    }
+
+    func notifyVPNFailed(profileName: String, message: String) {
+        post(title: "VPN Failed", message: "\(profileName) · \(message)")
+    }
+
     func notifyFailure(title: String, message: String) {
         post(title: title, message: message)
     }

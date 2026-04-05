@@ -19,6 +19,12 @@
 		A00000010000000000000005 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000008 /* NetworkExtension.framework */; };
 		A00000010000000000000013 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000017 /* UserNotifications.framework */; };
 		A00000010000000000000016 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000018 /* Security.framework */; };
+		A00000010000000000000018 /* VPNProviderPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000022 /* VPNProviderPayload.swift */; };
+		A00000010000000000000019 /* SystemVPNConfigurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000023 /* SystemVPNConfigurationStore.swift */; };
+		A00000010000000000000020 /* VPNConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000024 /* VPNConnectionState.swift */; };
+		A00000010000000000000021 /* SystemVPNConnectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000025 /* SystemVPNConnectionStore.swift */; };
+		A00000010000000000000022 /* PacketTunnelStartupError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000026 /* PacketTunnelStartupError.swift */; };
+		A00000010000000000000023 /* PacketTunnelStartupContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000027 /* PacketTunnelStartupContext.swift */; };
 		A00000010000000000000006 /* MacOVPNPacketTunnel.appex in Embed App Extensions */ = {
 			isa = PBXBuildFile;
 			fileRef = A00000110000000000000010 /* MacOVPNPacketTunnel.appex */;
@@ -76,6 +82,12 @@
 		A00000110000000000000021 /* ProfileCredentialsPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCredentialsPrompt.swift; sourceTree = "<group>"; };
 		A00000110000000000000019 /* ProfileCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCredentials.swift; sourceTree = "<group>"; };
 		A00000110000000000000020 /* KeychainProfileCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainProfileCredentialStore.swift; sourceTree = "<group>"; };
+		A00000110000000000000022 /* VPNProviderPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNProviderPayload.swift; sourceTree = "<group>"; };
+		A00000110000000000000023 /* SystemVPNConfigurationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemVPNConfigurationStore.swift; sourceTree = "<group>"; };
+		A00000110000000000000024 /* VPNConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNConnectionState.swift; sourceTree = "<group>"; };
+		A00000110000000000000025 /* SystemVPNConnectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemVPNConnectionStore.swift; sourceTree = "<group>"; };
+		A00000110000000000000026 /* PacketTunnelStartupError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelStartupError.swift; sourceTree = "<group>"; };
+		A00000110000000000000027 /* PacketTunnelStartupContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelStartupContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +128,7 @@
 			children = (
 				A00000050000000000000003 /* App */,
 				A00000050000000000000011 /* Credentials */,
+				A00000050000000000000012 /* VPN */,
 				A00000050000000000000010 /* Profiles */,
 				A00000050000000000000004 /* Resources */,
 			);
@@ -162,10 +175,23 @@
 			path = Profiles;
 			sourceTree = "<group>";
 		};
+		A00000050000000000000012 /* VPN */ = {
+			isa = PBXGroup;
+			children = (
+				A00000110000000000000022 /* VPNProviderPayload.swift */,
+				A00000110000000000000023 /* SystemVPNConfigurationStore.swift */,
+				A00000110000000000000024 /* VPNConnectionState.swift */,
+				A00000110000000000000025 /* SystemVPNConnectionStore.swift */,
+			);
+			path = VPN;
+			sourceTree = "<group>";
+		};
 		A00000050000000000000005 /* MacOVPNPacketTunnel */ = {
 			isa = PBXGroup;
 			children = (
 				A00000110000000000000005 /* PacketTunnelProvider.swift */,
+				A00000110000000000000026 /* PacketTunnelStartupError.swift */,
+				A00000110000000000000027 /* PacketTunnelStartupContext.swift */,
 				A00000050000000000000006 /* Resources */,
 			);
 			path = MacOVPNPacketTunnel;
@@ -305,6 +331,10 @@
 				A00000010000000000000017 /* ProfileCredentialsPrompt.swift in Sources */,
 				A00000010000000000000014 /* ProfileCredentials.swift in Sources */,
 				A00000010000000000000015 /* KeychainProfileCredentialStore.swift in Sources */,
+				A00000010000000000000018 /* VPNProviderPayload.swift in Sources */,
+				A00000010000000000000019 /* SystemVPNConfigurationStore.swift in Sources */,
+				A00000010000000000000020 /* VPNConnectionState.swift in Sources */,
+				A00000010000000000000021 /* SystemVPNConnectionStore.swift in Sources */,
 				A00000010000000000000007 /* ProfileImporter.swift in Sources */,
 				A00000010000000000000008 /* ProfilePaths.swift in Sources */,
 				A00000010000000000000009 /* ProfileRecord.swift in Sources */,
@@ -317,8 +347,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A00000010000000000000003 /* PacketTunnelProvider.swift in Sources */,
+				A00000010000000000000022 /* PacketTunnelStartupError.swift in Sources */,
+				A00000010000000000000023 /* PacketTunnelStartupContext.swift in Sources */,
 				A00000010000000000000014 /* ProfileCredentials.swift in Sources */,
 				A00000010000000000000015 /* KeychainProfileCredentialStore.swift in Sources */,
+				A00000010000000000000018 /* VPNProviderPayload.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
