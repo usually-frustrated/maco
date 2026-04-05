@@ -1,0 +1,12 @@
+import AppKit
+
+@main
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    private var menuBarController: MenuBarController?
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
+        AppNotificationCenter.shared.prepare()
+        menuBarController = MenuBarController()
+    }
+}

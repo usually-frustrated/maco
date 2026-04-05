@@ -4,6 +4,8 @@
 
 This document defines a phased implementation path where each phase ends in a slightly usable MVP. It is written to support future execution in separate threads without requiring a large project-management layer.
 
+Implemented work is tracked in [Implementation Logs](./implementation-logs.md).
+
 ## Execution Rules
 
 - Each phase should end in a working, testable slice.
@@ -93,57 +95,117 @@ Add credential capture and persistence with Keychain.
 - Missing credentials are collected at connect time and persisted correctly
 - Keychain-backed auth data is working before VPN connection logic arrives
 
-## Phase 4: OpenVPN Core Integration
+## Phase 4: System VPN Configuration Layer
 
 ### Goal
 
-Get the packet tunnel extension talking to `OpenVPN 3 Core`.
+Create the app-side `NetworkExtension` configuration model that maps imported profiles to system VPN configurations.
+
+### Scope
+
+- Add an app-side wrapper around `NETunnelProviderManager`
+- Create one provider configuration per imported profile
+- Persist and reload provider configurations on app launch
+- Define the provider payload that identifies the profile UUID and on-disk config
+- Reconcile imported profiles with saved `NetworkExtension` managers cleanly
+
+### MVP Outcome
+
+- One imported profile can be installed as a system VPN configuration
+- The app has a stable per-profile identity model for later connect/disconnect work
+
+## Phase 5: Menu Bar Connection Controls And State
+
+### Goal
+
+Expose connect/disconnect operations and current per-profile state through the menu bar.
+
+### Scope
+
+- Add per-profile connect and disconnect actions
+- Observe `NetworkExtension` status changes
+- Show connecting, connected, disconnecting, and failed states in the menu bar
+- Send notifications for passive connection state and failure updates
+- Keep the menu bar as the only app-owned control surface
+
+### MVP Outcome
+
+- A user can start and stop one configured profile from the menu bar
+- App state reflects system VPN lifecycle instead of import-only state
+
+## Phase 6: Packet Tunnel Startup Contract
+
+### Goal
+
+Define and implement the startup contract between the app and the packet tunnel extension.
+
+### Scope
+
+- Parse provider configuration inside `NEPacketTunnelProvider`
+- Resolve the imported profile directory and config file from the provider payload
+- Load shared username/password credentials inside the extension
+- Return structured startup errors instead of the current stub failure
+- Keep extension startup logic small and easy to reason about before adding the VPN engine
+
+### MVP Outcome
+
+- Tunnel startup reaches real profile-loading code in the extension
+- Failures now identify missing profile/config/credential setup precisely
+
+## Phase 7: OpenVPN Core Single-Profile Connection
+
+### Goal
+
+Get one imported profile connecting through `OpenVPN 3 Core`.
 
 ### Scope
 
 - Add the OpenVPN core dependency
 - Define the Swift-side wrapper around the engine
-- Load imported profile config into the engine
-- Establish the tunnel-provider control flow
-- Implement connect/disconnect plumbing for one profile
+- Load the imported `.ovpn` into the engine
+- Translate engine lifecycle into tunnel lifecycle callbacks
+- Implement real connect/disconnect plumbing for one profile
 
 ### MVP Outcome
 
 - One imported profile can attempt a real connection from the menu bar
 - Basic connection lifecycle is visible in app state
 
-## Phase 5: TOTP Connection Flow
+## Phase 8: Connect-Time Credentials And TOTP
 
 ### Goal
 
-Support username/password plus TOTP during connection.
+Support the first-release auth flow for username/password plus TOTP.
 
 ### Scope
 
+- Prompt for username/password on connect when credentials are missing
+- Save newly entered username/password to Keychain after successful entry
 - Detect the TOTP-relevant challenge flow needed by the current setup
 - Prompt for OTP at connection time
 - Pass OTP into the OpenVPN auth flow
+- Never persist TOTP
 - Handle retry and failure states cleanly
-- Use notifications for passive status and errors
 
 ### MVP Outcome
 
 - A real profile using username/password + TOTP can connect end-to-end
+- Missing saved credentials no longer block first use
 - OTP is always entered fresh
 
-## Phase 6: Multi-Profile Operation
+## Phase 9: Multi-Profile Operation And Validation
 
 ### Goal
 
-Support multiple saved profiles and validate the concurrent-connection model.
+Support multiple saved profiles and verify the concurrent-connection model early enough to correct course if needed.
 
 ### Scope
 
-- Finalize per-profile configuration identity
-- Support multiple provider configurations
+- Finalize per-profile configuration identity across app, extension, and Keychain
+- Support multiple provider configurations cleanly
 - Track state per profile
 - Validate whether multiple profiles can be active at once in the chosen architecture
-- If needed, adjust the persistence and session model without breaking earlier phases
+- If concurrency does not work cleanly, document the exact platform constraint and adjust the design intentionally
 
 ### MVP Outcome
 
@@ -151,24 +213,47 @@ Support multiple saved profiles and validate the concurrent-connection model.
 - The project has a verified answer on concurrent active profiles
 - If concurrency works, multiple profiles can connect independently
 
-## Phase 7: Certificate Happy Path
+## Phase 10: Certificate Happy Path And Import Validation
 
 ### Goal
 
-Add minimal certificate-based support if it fits the architecture cleanly.
+Add minimal certificate-based support if it fits cleanly, and tighten import behavior around unusable configurations.
 
 ### Scope
 
 - Support the simplest viable cert/key import path
 - Use native Keychain-backed handling where practical
 - Reject unsupported cert setups clearly rather than partially faking support
+- Distinguish between:
+  - imported and usable
+  - imported with warnings
+  - rejected because connection cannot be made correctly or safely
+- Surface import warnings and rejection reasons clearly enough for handoff and debugging
 
 ### MVP Outcome
 
 - Some common certificate-based `.ovpn` profiles work
 - Unsupported certificate variants fail clearly and intentionally
 
-## Phase 8: Hardening And Release Prep
+## Phase 11: Hardening And Test Coverage
+
+### Goal
+
+Reduce risk in the connection and import path before packaging.
+
+### Scope
+
+- Import and connection error cleanup
+- Basic test coverage for the critical core pieces
+- Regression coverage for profile-manager mapping, provider payloads, and auth handling
+- User-facing warnings for partially supported configs
+
+### MVP Outcome
+
+- The app is usable by real users with known implementation constraints
+- The highest-risk flows have repeatable verification
+
+## Phase 12: Release Prep
 
 ### Goal
 
@@ -177,15 +262,14 @@ Make the app shippable through GitHub Releases.
 ### Scope
 
 - Signing and notarization workflow
-- Import and connection error cleanup
-- User-facing warnings for partially supported configs
-- Basic test coverage for the critical core pieces
 - Release checklist
+- Install/build documentation only where it is actually needed
+- Final packaging verification
 
 ### MVP Outcome
 
 - A GitHub Releases build can be produced and installed
-- The app is usable by real users with known constraints
+- Release steps are explicit enough to hand off cleanly
 
 ## Suggested Working Order Inside Each Phase
 

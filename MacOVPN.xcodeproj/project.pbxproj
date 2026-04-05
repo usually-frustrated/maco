@@ -1,0 +1,488 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+	 A00000010000000000000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000001 /* AppDelegate.swift */; };
+		A00000010000000000000002 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000002 /* MenuBarController.swift */; };
+		A00000010000000000000011 /* AppNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000015 /* AppNotificationCenter.swift */; };
+		A00000010000000000000012 /* MenuBarStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000016 /* MenuBarStatus.swift */; };
+		A00000010000000000000017 /* ProfileCredentialsPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000021 /* ProfileCredentialsPrompt.swift */; };
+		A00000010000000000000014 /* ProfileCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000019 /* ProfileCredentials.swift */; };
+		A00000010000000000000015 /* KeychainProfileCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000020 /* KeychainProfileCredentialStore.swift */; };
+		A00000010000000000000003 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000005 /* PacketTunnelProvider.swift */; };
+		A00000010000000000000004 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000007 /* AppKit.framework */; };
+		A00000010000000000000005 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000008 /* NetworkExtension.framework */; };
+		A00000010000000000000013 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000017 /* UserNotifications.framework */; };
+		A00000010000000000000016 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000018 /* Security.framework */; };
+		A00000010000000000000006 /* MacOVPNPacketTunnel.appex in Embed App Extensions */ = {
+			isa = PBXBuildFile;
+			fileRef = A00000110000000000000010 /* MacOVPNPacketTunnel.appex */;
+			settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); };
+		};
+		A00000010000000000000007 /* ProfileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000011 /* ProfileImporter.swift */; };
+		A00000010000000000000008 /* ProfilePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000012 /* ProfilePaths.swift */; };
+		A00000010000000000000009 /* ProfileRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000013 /* ProfileRecord.swift */; };
+		A00000010000000000000010 /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000014 /* ProfileStore.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A00000020000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000100000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A00000100000000000000003;
+			remoteInfo = MacOVPNPacketTunnel;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A00000030000000000000001 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A00000010000000000000006 /* MacOVPNPacketTunnel.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A00000110000000000000001 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A00000110000000000000002 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		A00000110000000000000003 /* MacOVPN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacOVPN.entitlements; sourceTree = "<group>"; };
+		A00000110000000000000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A00000110000000000000005 /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
+		A00000110000000000000006 /* MacOVPNPacketTunnel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacOVPNPacketTunnel.entitlements; sourceTree = "<group>"; };
+		A00000110000000000000007 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		A00000110000000000000008 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
+		A00000110000000000000017 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		A00000110000000000000018 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A00000110000000000000009 /* MacOVPN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacOVPN.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00000110000000000000010 /* MacOVPNPacketTunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MacOVPNPacketTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00000110000000000000011 /* ProfileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImporter.swift; sourceTree = "<group>"; };
+		A00000110000000000000012 /* ProfilePaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePaths.swift; sourceTree = "<group>"; };
+		A00000110000000000000013 /* ProfileRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRecord.swift; sourceTree = "<group>"; };
+		A00000110000000000000014 /* ProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStore.swift; sourceTree = "<group>"; };
+		A00000110000000000000015 /* AppNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotificationCenter.swift; sourceTree = "<group>"; };
+		A00000110000000000000016 /* MenuBarStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarStatus.swift; sourceTree = "<group>"; };
+		A00000110000000000000021 /* ProfileCredentialsPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCredentialsPrompt.swift; sourceTree = "<group>"; };
+		A00000110000000000000019 /* ProfileCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCredentials.swift; sourceTree = "<group>"; };
+		A00000110000000000000020 /* KeychainProfileCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainProfileCredentialStore.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A00000040000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000010000000000000004 /* AppKit.framework in Frameworks */,
+				A00000010000000000000013 /* UserNotifications.framework in Frameworks */,
+				A00000010000000000000016 /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A00000040000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000010000000000000005 /* NetworkExtension.framework in Frameworks */,
+				A00000010000000000000016 /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A00000050000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A00000050000000000000002 /* MacOVPN */,
+				A00000050000000000000005 /* MacOVPNPacketTunnel */,
+				A00000050000000000000008 /* Frameworks */,
+				A00000050000000000000009 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A00000050000000000000002 /* MacOVPN */ = {
+			isa = PBXGroup;
+			children = (
+				A00000050000000000000003 /* App */,
+				A00000050000000000000011 /* Credentials */,
+				A00000050000000000000010 /* Profiles */,
+				A00000050000000000000004 /* Resources */,
+			);
+			path = MacOVPN;
+			sourceTree = "<group>";
+		};
+		A00000050000000000000003 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A00000110000000000000001 /* AppDelegate.swift */,
+				A00000110000000000000015 /* AppNotificationCenter.swift */,
+				A00000110000000000000002 /* MenuBarController.swift */,
+				A00000110000000000000016 /* MenuBarStatus.swift */,
+				A00000110000000000000021 /* ProfileCredentialsPrompt.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A00000050000000000000004 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A00000110000000000000003 /* MacOVPN.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A00000050000000000000011 /* Credentials */ = {
+			isa = PBXGroup;
+			children = (
+				A00000110000000000000019 /* ProfileCredentials.swift */,
+				A00000110000000000000020 /* KeychainProfileCredentialStore.swift */,
+			);
+			path = Credentials;
+			sourceTree = "<group>";
+		};
+		A00000050000000000000010 /* Profiles */ = {
+			isa = PBXGroup;
+			children = (
+				A00000110000000000000011 /* ProfileImporter.swift */,
+				A00000110000000000000012 /* ProfilePaths.swift */,
+				A00000110000000000000013 /* ProfileRecord.swift */,
+				A00000110000000000000014 /* ProfileStore.swift */,
+			);
+			path = Profiles;
+			sourceTree = "<group>";
+		};
+		A00000050000000000000005 /* MacOVPNPacketTunnel */ = {
+			isa = PBXGroup;
+			children = (
+				A00000110000000000000005 /* PacketTunnelProvider.swift */,
+				A00000050000000000000006 /* Resources */,
+			);
+			path = MacOVPNPacketTunnel;
+			sourceTree = "<group>";
+		};
+		A00000050000000000000006 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A00000110000000000000004 /* Info.plist */,
+				A00000110000000000000006 /* MacOVPNPacketTunnel.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A00000050000000000000008 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A00000110000000000000007 /* AppKit.framework */,
+				A00000110000000000000008 /* NetworkExtension.framework */,
+				A00000110000000000000017 /* UserNotifications.framework */,
+				A00000110000000000000018 /* Security.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A00000050000000000000009 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A00000110000000000000009 /* MacOVPN.app */,
+				A00000110000000000000010 /* MacOVPNPacketTunnel.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A00000100000000000000002 /* MacOVPN */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A00000070000000000000001 /* Build configuration list for PBXNativeTarget "MacOVPN" */;
+			buildPhases = (
+				A00000060000000000000001 /* Sources */,
+				A00000040000000000000001 /* Frameworks */,
+				A00000080000000000000001 /* Resources */,
+				A00000030000000000000001 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A00000090000000000000001 /* PBXTargetDependency */,
+			);
+			name = MacOVPN;
+			productName = MacOVPN;
+			productReference = A00000110000000000000009 /* MacOVPN.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A00000100000000000000003 /* MacOVPNPacketTunnel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A00000070000000000000002 /* Build configuration list for PBXNativeTarget "MacOVPNPacketTunnel" */;
+			buildPhases = (
+				A00000060000000000000002 /* Sources */,
+				A00000040000000000000002 /* Frameworks */,
+				A00000080000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacOVPNPacketTunnel;
+			productName = MacOVPNPacketTunnel;
+			productReference = A00000110000000000000010 /* MacOVPNPacketTunnel.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000100000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					A00000100000000000000002 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					A00000100000000000000003 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = A00000070000000000000003 /* Build configuration list for PBXProject "MacOVPN" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A00000050000000000000001;
+			productRefGroup = A00000050000000000000009 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A00000100000000000000002 /* MacOVPN */,
+				A00000100000000000000003 /* MacOVPNPacketTunnel */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A00000080000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A00000080000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A00000060000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000010000000000000001 /* AppDelegate.swift in Sources */,
+				A00000010000000000000011 /* AppNotificationCenter.swift in Sources */,
+				A00000010000000000000002 /* MenuBarController.swift in Sources */,
+				A00000010000000000000012 /* MenuBarStatus.swift in Sources */,
+				A00000010000000000000017 /* ProfileCredentialsPrompt.swift in Sources */,
+				A00000010000000000000014 /* ProfileCredentials.swift in Sources */,
+				A00000010000000000000015 /* KeychainProfileCredentialStore.swift in Sources */,
+				A00000010000000000000007 /* ProfileImporter.swift in Sources */,
+				A00000010000000000000008 /* ProfilePaths.swift in Sources */,
+				A00000010000000000000009 /* ProfileRecord.swift in Sources */,
+				A00000010000000000000010 /* ProfileStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A00000060000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000010000000000000003 /* PacketTunnelProvider.swift in Sources */,
+				A00000010000000000000014 /* ProfileCredentials.swift in Sources */,
+				A00000010000000000000015 /* KeychainProfileCredentialStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A00000090000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A00000100000000000000003 /* MacOVPNPacketTunnel */;
+			targetProxy = A00000020000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A000000A0000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A000000A0000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A000000A0000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MacOVPN/Resources/MacOVPN.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = MacOVPN;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.macovpn.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Debug;
+		};
+		A000000A0000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MacOVPN/Resources/MacOVPN.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = MacOVPN;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.macovpn.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Release;
+		};
+		A000000A0000000000000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = MacOVPNPacketTunnel/Resources/MacOVPNPacketTunnel.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = MacOVPNPacketTunnel/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.macovpn.app.packet-tunnel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Debug;
+		};
+		A000000A0000000000000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = MacOVPNPacketTunnel/Resources/MacOVPNPacketTunnel.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = MacOVPNPacketTunnel/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.macovpn.app.packet-tunnel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A00000070000000000000001 /* Build configuration list for PBXNativeTarget "MacOVPN" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A000000A0000000000000003 /* Debug */,
+				A000000A0000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A00000070000000000000002 /* Build configuration list for PBXNativeTarget "MacOVPNPacketTunnel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A000000A0000000000000005 /* Debug */,
+				A000000A0000000000000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A00000070000000000000003 /* Build configuration list for PBXProject "MacOVPN" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A000000A0000000000000001 /* Debug */,
+				A000000A0000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A00000100000000000000001 /* Project object */;
+}

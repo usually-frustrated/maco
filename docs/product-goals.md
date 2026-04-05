@@ -4,6 +4,8 @@
 
 This document describes what the project is trying to build at a high level. It is intentionally not a detailed design or implementation plan.
 
+Implemented work is tracked in [Implementation Logs](./implementation-logs.md).
+
 ## Development Goals
 
 - Build a native macOS OpenVPN client without reinventing the VPN stack

@@ -1,0 +1,14 @@
+.DS_Store
+
+# Xcode user-specific state
+*.xcuserstate
+xcuserdata/
+
+# Xcode and SwiftPM build products
+build/
+DerivedData/
+.build/
+
+# SwiftPM resolution artifacts when this repo adds packages later
+.swiftpm/
+Package.resolved

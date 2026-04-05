@@ -4,6 +4,8 @@
 
 This document records the architecture decisions that are already locked for the first version of the project, plus a small number of explicitly deferred items. It is the canonical reference for what the system is and is not trying to be.
 
+Implemented work is tracked in [Implementation Logs](./implementation-logs.md).
+
 ## Product Shape
 
 - Native macOS OpenVPN client
@@ -71,6 +73,7 @@ Out of scope for v1:
 Locked storage direction:
 
 - Use `~/.config/...` for imported profiles and related user-maintained files.
+- Current layout: `~/.config/MacOVPN/profiles/<UUID>/config.ovpn` and `~/.config/MacOVPN/profiles/<UUID>/profile.json`
 - Files we maintain for the user should be easy to inspect, open, and edit directly.
 - The app should treat on-disk profile files as user-visible configuration, not hidden internal implementation state.
 
@@ -81,6 +84,7 @@ Locked storage direction:
 - If credentials are not already saved, the first connection attempt should prompt for them.
 - After successful entry, credentials should be saved to Keychain.
 - TOTP codes must always be entered fresh and must not be persisted.
+- The current Keychain shape is one generic password item per profile UUID, storing a JSON username/password payload only, using the shared `keychain-access-groups` entitlement for the app and packet tunnel extension.
 
 ### Authentication Support
 
@@ -144,8 +148,6 @@ The requirement is "confirm the exact Apple/OpenVPN integration model that makes
 
 ## Open Items That Are Not Locked Yet
 
-- Exact layout of the on-disk imported profile directory
-- Exact Keychain item schema and access-group structure
 - Exact UI behavior for OTP prompt timing and retry
 - Exact extent of minimal certificate-auth happy-path support in v1
 - Exact warning model for partially supported `.ovpn` directives
