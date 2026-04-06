@@ -678,7 +678,7 @@ class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
 
             ClientAPI::Config config;
             config.content = merged.profileContent;
-            config.guiVersion = "MacOVPN 0.1.0";
+            config.guiVersion = "maco 0.1.0";
 
             const auto eval = eval_config(config);
             if (eval.error) {

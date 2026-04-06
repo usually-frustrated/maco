@@ -40,7 +40,7 @@ enum MenuBarStatus {
     var toolTip: String {
         switch self {
         case .empty:
-            return "MacOVPN · No imported profiles yet"
+            return "maco · No imported profiles yet"
         case .ready(let profileCount, let warningCount, let connectedCount, let busyCount):
             var components = ["\(profileCount) imported profile\(profileCount == 1 ? "" : "s")"]
             if connectedCount > 0 {
@@ -52,9 +52,9 @@ enum MenuBarStatus {
             if warningCount > 0 {
                 components.append("\(warningCount) warning\(warningCount == 1 ? "" : "s")")
             }
-            return "MacOVPN · \(components.joined(separator: " · "))"
+            return "maco · \(components.joined(separator: " · "))"
         case .storageUnavailable:
-            return "MacOVPN · Profile storage unavailable"
+            return "maco · Profile storage unavailable"
         }
     }
 

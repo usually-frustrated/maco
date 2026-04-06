@@ -25,19 +25,19 @@ Implemented:
 
 Key files:
 
-- `MacOVPN.xcodeproj/project.pbxproj`
-- `MacOVPN/App/AppDelegate.swift`
-- `MacOVPN/App/MenuBarController.swift`
-- `MacOVPNPacketTunnel/PacketTunnelProvider.swift`
-- `MacOVPN/Resources/MacOVPN.entitlements`
-- `MacOVPNPacketTunnel/Resources/Info.plist`
-- `MacOVPNPacketTunnel/Resources/MacOVPNPacketTunnel.entitlements`
+- `maco.xcodeproj/project.pbxproj`
+- `maco/App/AppDelegate.swift`
+- `maco/App/MenuBarController.swift`
+- `macopackettunnel/PacketTunnelProvider.swift`
+- `maco/Resources/maco.entitlements`
+- `macopackettunnel/Resources/Info.plist`
+- `macopackettunnel/Resources/macopackettunnel.entitlements`
 
 ### Phase 1: Profile Storage And Import
 
 Implemented:
 
-- Profile import into the shared app-group container at `<app-group>/MacOVPN/profiles/<UUID>/`
+- Profile import into the shared app-group container at `<app-group>/maco/profiles/<UUID>/`
 - Stored `config.ovpn` plus `profile.json` metadata per profile
 - Profile listing, removal, and open-folder support
 - Import analysis with warnings for unsupported directives
@@ -45,10 +45,10 @@ Implemented:
 
 Key files:
 
-- `MacOVPN/Profiles/ProfilePaths.swift`
-- `MacOVPN/Profiles/ProfileRecord.swift`
-- `MacOVPN/Profiles/ProfileImporter.swift`
-- `MacOVPN/Profiles/ProfileStore.swift`
+- `maco/Profiles/ProfilePaths.swift`
+- `maco/Profiles/ProfileRecord.swift`
+- `maco/Profiles/ProfileImporter.swift`
+- `maco/Profiles/ProfileStore.swift`
 
 ### Phase 2: Menu Bar MVP
 
@@ -61,9 +61,9 @@ Implemented:
 
 Key files:
 
-- `MacOVPN/App/MenuBarController.swift`
-- `MacOVPN/App/MenuBarStatus.swift`
-- `MacOVPN/App/AppNotificationCenter.swift`
+- `maco/App/MenuBarController.swift`
+- `maco/App/MenuBarStatus.swift`
+- `maco/App/AppNotificationCenter.swift`
 
 ### Phase 3: Credentials And Keychain
 
@@ -78,12 +78,12 @@ Implemented:
 
 Key files:
 
-- `MacOVPN/Credentials/ProfileCredentials.swift`
-- `MacOVPN/Credentials/KeychainProfileCredentialStore.swift`
-- `MacOVPN/App/ProfileCredentialsPrompt.swift`
-- `MacOVPN/App/MenuBarController.swift`
-- `MacOVPN/Resources/MacOVPN.entitlements`
-- `MacOVPNPacketTunnel/Resources/MacOVPNPacketTunnel.entitlements`
+- `maco/Credentials/ProfileCredentials.swift`
+- `maco/Credentials/KeychainProfileCredentialStore.swift`
+- `maco/App/ProfileCredentialsPrompt.swift`
+- `maco/App/MenuBarController.swift`
+- `maco/Resources/maco.entitlements`
+- `macopackettunnel/Resources/macopackettunnel.entitlements`
 
 ### Phase 4: System VPN Configuration Layer
 
@@ -96,10 +96,10 @@ Implemented:
 
 Key files:
 
-- `MacOVPN/VPN/SystemVPNConfigurationStore.swift`
-- `MacOVPN/VPN/VPNProviderPayload.swift`
-- `MacOVPN/App/MenuBarController.swift`
-- `MacOVPN.xcodeproj/project.pbxproj`
+- `maco/VPN/SystemVPNConfigurationStore.swift`
+- `maco/VPN/VPNProviderPayload.swift`
+- `maco/App/MenuBarController.swift`
+- `maco.xcodeproj/project.pbxproj`
 
 ### Phase 5: Menu Bar Connection Controls And State
 
@@ -112,12 +112,12 @@ Implemented:
 
 Key files:
 
-- `MacOVPN/VPN/VPNConnectionState.swift`
-- `MacOVPN/VPN/SystemVPNConnectionStore.swift`
-- `MacOVPN/App/MenuBarController.swift`
-- `MacOVPN/App/MenuBarStatus.swift`
-- `MacOVPN/App/AppNotificationCenter.swift`
-- `MacOVPN.xcodeproj/project.pbxproj`
+- `maco/VPN/VPNConnectionState.swift`
+- `maco/VPN/SystemVPNConnectionStore.swift`
+- `maco/App/MenuBarController.swift`
+- `maco/App/MenuBarStatus.swift`
+- `maco/App/AppNotificationCenter.swift`
+- `maco.xcodeproj/project.pbxproj`
 
 ### Phase 6: Packet Tunnel Startup Contract
 
@@ -130,16 +130,19 @@ Implemented:
 
 Key files:
 
-- `MacOVPNPacketTunnel/PacketTunnelProvider.swift`
-- `MacOVPNPacketTunnel/PacketTunnelStartupContext.swift`
-- `MacOVPNPacketTunnel/PacketTunnelStartupError.swift`
-- `MacOVPN.xcodeproj/project.pbxproj`
+- `macopackettunnel/PacketTunnelProvider.swift`
+- `macopackettunnel/PacketTunnelStartupContext.swift`
+- `macopackettunnel/PacketTunnelStartupError.swift`
+- `maco.xcodeproj/project.pbxproj`
 
 ## Current Stop Point
 
 - The repo is now in Phase 7 work, with the packet tunnel bridge and lifecycle wiring compiling.
+- The project has been renamed to `maco`, and the packet tunnel source tree now lives under `macopackettunnel/`.
+- The renamed project builds locally with `xcodebuild -project maco.xcodeproj -scheme maco -configuration Debug -sdk macosx -derivedDataPath /tmp/maco-derived CODE_SIGNING_ALLOWED=NO build`.
 - The next incomplete part of Phase 7 is runtime validation of one real OpenVPN 3 Core connection path for one profile.
 - Profile storage has moved to the shared app-group container so the packet tunnel extension can read the imported profile files under sandbox.
+- Signed-runtime validation of the packet tunnel read path is still pending in this environment; the code path is in place, but the sandboxed extension has not been proven on a real signed launch yet.
 
 ## Not Implemented Yet
 
@@ -154,12 +157,14 @@ Key files:
 
 - Repeated `swiftc -typecheck` checks across app, profile, credential, and extension sources
 - `plutil -lint` checks for the Xcode project, plist files, and entitlements
-- Local `xcodebuild` verification for `MacOVPN` and `MacOVPNPacketTunnel` with signing disabled
+- Local `xcodebuild` verification for `maco` and `macopackettunnel` with signing disabled
 - Local `xcodebuild` verification after Phase 4 with `-derivedDataPath /tmp/macovpn-derived CODE_SIGNING_ALLOWED=NO`
 - Local `xcodebuild` verification after Phase 5 with `-derivedDataPath /tmp/macovpn-derived CODE_SIGNING_ALLOWED=NO`
 - Local `xcodebuild` verification after Phase 6 with `-derivedDataPath /tmp/macovpn-derived CODE_SIGNING_ALLOWED=NO`
 - Verified the upstream `OpenVPN 3 Core` macOS build path in `/tmp/openvpn3` using `cmake` plus `zerobrew`-provided dependencies, including a successful `ovpncli` build
 - Local `xcodebuild` verification after Phase 7 bridge wiring with `-derivedDataPath /tmp/macovpn-derived CODE_SIGNING_ALLOWED=NO`
+- Local `xcodebuild` verification after the `maco` rename with `-derivedDataPath /tmp/maco-derived CODE_SIGNING_ALLOWED=NO`
+- Additional Phase 7 runtime probe attempt for the signed sandboxed packet-tunnel read path was not completed cleanly in this environment, so the runtime file-access check remains the open blocker.
 - Review passes that resulted in fixes for:
   - non-default profile-store root handling
   - tolerant profile decoding

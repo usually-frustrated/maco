@@ -24,7 +24,7 @@ final class SystemVPNConnectionStore {
             guard let managers else {
                 DispatchQueue.main.async {
                     completion(.failure(NSError(
-                        domain: "MacOVPN.VPN",
+                        domain: "maco.VPN",
                         code: 1,
                         userInfo: [NSLocalizedDescriptionKey: "Could not load VPN configurations."]
                     )))
@@ -72,7 +72,7 @@ final class SystemVPNConnectionStore {
             case .success:
                 guard let manager = self.managersByProfileID[profileID] else {
                     completion(.failure(NSError(
-                        domain: "MacOVPN.VPN",
+                        domain: "maco.VPN",
                         code: 3,
                         userInfo: [NSLocalizedDescriptionKey: "No VPN configuration exists for this profile."]
                     )))

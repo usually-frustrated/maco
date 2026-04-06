@@ -51,7 +51,7 @@ final class MenuBarController: NSObject {
 
     private func configureStatusItem() {
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "lock.shield", accessibilityDescription: "MacOVPN")
+            button.image = NSImage(systemSymbolName: "lock.shield", accessibilityDescription: "maco")
             button.imagePosition = .imageOnly
         }
 
@@ -94,7 +94,7 @@ final class MenuBarController: NSObject {
         }
 
         menu.addItem(.separator())
-        menu.addItem(actionItem(title: "Quit MacOVPN", action: #selector(quit)))
+        menu.addItem(actionItem(title: "Quit maco", action: #selector(quit)))
         return menu
     }
 
@@ -141,7 +141,7 @@ final class MenuBarController: NSObject {
 
     private func updateStatusItem(using status: MenuBarStatus) {
         guard let button = statusItem.button else { return }
-        button.image = NSImage(systemSymbolName: status.symbolName, accessibilityDescription: "MacOVPN")
+        button.image = NSImage(systemSymbolName: status.symbolName, accessibilityDescription: "maco")
         button.toolTip = status.toolTip
     }
 

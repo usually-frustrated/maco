@@ -1,7 +1,7 @@
 import Foundation
 
 enum ProfilePaths {
-    static let appFolderName = "MacOVPN"
+    static let appFolderName = "maco"
     static let profilesFolderName = "profiles"
     static let sharedAppGroupIdentifier = "group.com.macovpn.sharedprofiles"
     static let profileFileName = "config.ovpn"

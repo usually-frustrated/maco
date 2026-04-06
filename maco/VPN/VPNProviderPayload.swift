@@ -1,10 +1,10 @@
 import Foundation
 
 struct VPNProviderPayload: Equatable, Sendable {
-    static let managedByAppKey = "MacOVPNManagedByApp"
-    static let profileIDKey = "MacOVPNProfileID"
-    static let profileDirectoryPathKey = "MacOVPNProfileDirectoryPath"
-    static let profileConfigPathKey = "MacOVPNProfileConfigPath"
+    static let managedByAppKey = "macoManagedByApp"
+    static let profileIDKey = "macoProfileID"
+    static let profileDirectoryPathKey = "macoProfileDirectoryPath"
+    static let profileConfigPathKey = "macoProfileConfigPath"
 
     let profileID: UUID
     let profileDirectoryPath: String
