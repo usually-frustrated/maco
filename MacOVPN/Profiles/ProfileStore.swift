@@ -7,15 +7,18 @@ final class ProfileStore {
     private let fileManager: FileManager
     private let importer: ProfileImporter
     private let rootURL: URL
+    private let legacyRootURL: URL
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
 
     init(
         rootURL: URL = ProfilePaths.profilesRootURL,
+        legacyRootURL: URL = ProfilePaths.legacyProfilesRootURL,
         fileManager: FileManager = .default,
         importer: ProfileImporter = ProfileImporter()
     ) {
         self.rootURL = rootURL
+        self.legacyRootURL = legacyRootURL
         self.fileManager = fileManager
         self.importer = importer
         jsonEncoder = JSONEncoder()
@@ -29,6 +32,7 @@ final class ProfileStore {
 
     func ensureStorageDirectory() throws {
         try fileManager.createDirectory(at: rootURL, withIntermediateDirectories: true)
+        try migrateLegacyStorageIfNeeded()
     }
 
     func importProfile(from sourceURL: URL) throws -> ProfileImportResult {
@@ -88,6 +92,43 @@ final class ProfileStore {
     func openProfilesFolder() -> Bool {
         try? ensureStorageDirectory()
         return NSWorkspace.shared.open(rootURL)
+    }
+
+    private func migrateLegacyStorageIfNeeded() throws {
+        guard rootURL.standardizedFileURL != legacyRootURL.standardizedFileURL else {
+            return
+        }
+
+        guard fileManager.fileExists(atPath: legacyRootURL.path) else {
+            return
+        }
+
+        let legacyItems = try fileManager.contentsOfDirectory(
+            at: legacyRootURL,
+            includingPropertiesForKeys: [.isDirectoryKey],
+            options: [.skipsHiddenFiles]
+        )
+
+        guard !legacyItems.isEmpty else {
+            return
+        }
+
+        let currentItems = try fileManager.contentsOfDirectory(
+            at: rootURL,
+            includingPropertiesForKeys: [.isDirectoryKey],
+            options: [.skipsHiddenFiles]
+        )
+        guard currentItems.isEmpty else {
+            return
+        }
+
+        for itemURL in legacyItems {
+            let destinationURL = rootURL.appendingPathComponent(itemURL.lastPathComponent, isDirectory: true)
+            if fileManager.fileExists(atPath: destinationURL.path) {
+                continue
+            }
+            try fileManager.moveItem(at: itemURL, to: destinationURL)
+        }
     }
 
     private func write(_ record: ProfileRecord, to directoryURL: URL) throws {

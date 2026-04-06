@@ -37,7 +37,7 @@ Key files:
 
 Implemented:
 
-- Profile import into `~/.config/MacOVPN/profiles/<UUID>/`
+- Profile import into the shared app-group container at `<app-group>/MacOVPN/profiles/<UUID>/`
 - Stored `config.ovpn` plus `profile.json` metadata per profile
 - Profile listing, removal, and open-folder support
 - Import analysis with warnings for unsupported directives
@@ -137,9 +137,9 @@ Key files:
 
 ## Current Stop Point
 
-- The repo is currently at the end of Phase 6.
-- The next incomplete phase is Phase 7: OpenVPN Core Single-Profile Connection.
-- The local OpenVPN 3 Core dependency path has now been validated with `cmake` and `zerobrew`, so Phase 7 is ready to start instead of being blocked on toolchain setup.
+- The repo is now in Phase 7 work, with the packet tunnel bridge and lifecycle wiring compiling.
+- The next incomplete part of Phase 7 is runtime validation of one real OpenVPN 3 Core connection path for one profile.
+- Profile storage has moved to the shared app-group container so the packet tunnel extension can read the imported profile files under sandbox.
 
 ## Not Implemented Yet
 
@@ -159,6 +159,7 @@ Key files:
 - Local `xcodebuild` verification after Phase 5 with `-derivedDataPath /tmp/macovpn-derived CODE_SIGNING_ALLOWED=NO`
 - Local `xcodebuild` verification after Phase 6 with `-derivedDataPath /tmp/macovpn-derived CODE_SIGNING_ALLOWED=NO`
 - Verified the upstream `OpenVPN 3 Core` macOS build path in `/tmp/openvpn3` using `cmake` plus `zerobrew`-provided dependencies, including a successful `ovpncli` build
+- Local `xcodebuild` verification after Phase 7 bridge wiring with `-derivedDataPath /tmp/macovpn-derived CODE_SIGNING_ALLOWED=NO`
 - Review passes that resulted in fixes for:
   - non-default profile-store root handling
   - tolerant profile decoding
@@ -173,9 +174,8 @@ Key files:
 
 - The implementation logs are the intended handoff entry point for status.
 - The architecture, product, and phase docs remain the source of truth for intended behavior and sequencing.
-- Use [Implementation Handoff](./implementation-handoff.md) as the starting brief for the next post-Phase-6 implementation session.
+- Use [Implementation Handoff](./implementation-handoff.md) as the starting brief for the next Phase 7 implementation session.
 - The app now installs and reconciles system VPN configurations per imported profile.
-- The menu bar now exposes connection actions and observed VPN state for managed profiles, even though the packet tunnel is still stub-backed.
-- The packet tunnel now resolves provider payload, config paths, and shared credentials before returning its final not-yet-implemented engine error.
-- Phase 7 should start from the verified `cmake` plus `zerobrew` toolchain path rather than rediscovering dependency setup.
-- OpenVPN 3 Core integration and real tunnel lifecycle work are still required before the connection phases can be considered complete.
+- The menu bar now exposes connection actions and observed VPN state for managed profiles.
+- The packet tunnel now resolves provider payload, config paths, and shared credentials, then hands off to a compiling Objective-C++ OpenVPN bridge.
+- OpenVPN 3 Core integration and runtime connection validation are still required before the connection phase can be considered complete.

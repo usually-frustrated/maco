@@ -72,8 +72,9 @@ Out of scope for v1:
 
 Locked storage direction:
 
-- Use `~/.config/...` for imported profiles and related user-maintained files.
-- Current layout: `~/.config/MacOVPN/profiles/<UUID>/config.ovpn` and `~/.config/MacOVPN/profiles/<UUID>/profile.json`
+- Use a shared app-group container for imported profiles and related user-maintained files so the packet tunnel extension can read them under sandbox.
+- Active layout: `<app-group>/MacOVPN/profiles/<UUID>/config.ovpn` and `<app-group>/MacOVPN/profiles/<UUID>/profile.json`
+- Preserve legacy `~/.config/MacOVPN/profiles/...` data long enough to migrate it into the shared container.
 - Files we maintain for the user should be easy to inspect, open, and edit directly.
 - The app should treat on-disk profile files as user-visible configuration, not hidden internal implementation state.
 

@@ -25,6 +25,11 @@
 		A00000010000000000000021 /* SystemVPNConnectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000025 /* SystemVPNConnectionStore.swift */; };
 		A00000010000000000000022 /* PacketTunnelStartupError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000026 /* PacketTunnelStartupError.swift */; };
 		A00000010000000000000023 /* PacketTunnelStartupContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000027 /* PacketTunnelStartupContext.swift */; };
+		A00000010000000000000024 /* OpenVPNPacketTunnelBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000028 /* OpenVPNPacketTunnelBridge.mm */; };
+		A00000010000000000000025 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000029 /* CoreFoundation.framework */; };
+		A00000010000000000000026 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000030 /* CoreServices.framework */; };
+		A00000010000000000000027 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000031 /* SystemConfiguration.framework */; };
+		A00000010000000000000028 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000032 /* IOKit.framework */; };
 		A00000010000000000000006 /* MacOVPNPacketTunnel.appex in Embed App Extensions */ = {
 			isa = PBXBuildFile;
 			fileRef = A00000110000000000000010 /* MacOVPNPacketTunnel.appex */;
@@ -71,6 +76,10 @@
 		A00000110000000000000008 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		A00000110000000000000017 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		A00000110000000000000018 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A00000110000000000000029 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		A00000110000000000000030 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		A00000110000000000000031 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		A00000110000000000000032 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		A00000110000000000000009 /* MacOVPN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacOVPN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000110000000000000010 /* MacOVPNPacketTunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MacOVPNPacketTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000110000000000000011 /* ProfileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImporter.swift; sourceTree = "<group>"; };
@@ -88,6 +97,9 @@
 		A00000110000000000000025 /* SystemVPNConnectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemVPNConnectionStore.swift; sourceTree = "<group>"; };
 		A00000110000000000000026 /* PacketTunnelStartupError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelStartupError.swift; sourceTree = "<group>"; };
 		A00000110000000000000027 /* PacketTunnelStartupContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelStartupContext.swift; sourceTree = "<group>"; };
+		A00000110000000000000028 /* OpenVPNPacketTunnelBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenVPNPacketTunnelBridge.mm; sourceTree = "<group>"; };
+		A00000110000000000000033 /* OpenVPNPacketTunnelBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenVPNPacketTunnelBridge.h; sourceTree = "<group>"; };
+		A00000110000000000000034 /* MacOVPNPacketTunnel-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacOVPNPacketTunnel-Bridging-Header.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +119,10 @@
 			files = (
 				A00000010000000000000005 /* NetworkExtension.framework in Frameworks */,
 				A00000010000000000000016 /* Security.framework in Frameworks */,
+				A00000010000000000000025 /* CoreFoundation.framework in Frameworks */,
+				A00000010000000000000026 /* CoreServices.framework in Frameworks */,
+				A00000010000000000000027 /* SystemConfiguration.framework in Frameworks */,
+				A00000010000000000000028 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,6 +208,8 @@
 				A00000110000000000000005 /* PacketTunnelProvider.swift */,
 				A00000110000000000000026 /* PacketTunnelStartupError.swift */,
 				A00000110000000000000027 /* PacketTunnelStartupContext.swift */,
+				A00000110000000000000028 /* OpenVPNPacketTunnelBridge.mm */,
+				A00000110000000000000033 /* OpenVPNPacketTunnelBridge.h */,
 				A00000050000000000000006 /* Resources */,
 			);
 			path = MacOVPNPacketTunnel;
@@ -202,6 +220,7 @@
 			children = (
 				A00000110000000000000004 /* Info.plist */,
 				A00000110000000000000006 /* MacOVPNPacketTunnel.entitlements */,
+				A00000110000000000000034 /* MacOVPNPacketTunnel-Bridging-Header.h */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -349,6 +368,7 @@
 				A00000010000000000000003 /* PacketTunnelProvider.swift in Sources */,
 				A00000010000000000000022 /* PacketTunnelStartupError.swift in Sources */,
 				A00000010000000000000023 /* PacketTunnelStartupContext.swift in Sources */,
+				A00000010000000000000024 /* OpenVPNPacketTunnelBridge.mm in Sources */,
 				A00000010000000000000014 /* ProfileCredentials.swift in Sources */,
 				A00000010000000000000015 /* KeychainProfileCredentialStore.swift in Sources */,
 				A00000010000000000000018 /* VPNProviderPayload.swift in Sources */,
@@ -450,6 +470,16 @@
 				CODE_SIGN_ENTITLEMENTS = MacOVPNPacketTunnel/Resources/MacOVPNPacketTunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				HEADER_SEARCH_PATHS = (
+					"/tmp/openvpn3",
+					"/opt/zerobrew/opt/asio/include",
+					"/opt/zerobrew/opt/openssl@3/include",
+					"/opt/zerobrew/opt/fmt/include",
+					"/opt/zerobrew/opt/jsoncpp/include",
+					"/opt/zerobrew/opt/lz4/include",
+					"/opt/zerobrew/opt/xxhash/include",
+				);
 				INFOPLIST_FILE = MacOVPNPacketTunnel/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -457,9 +487,33 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DASIO_STANDALONE",
+					"-DUSE_ASIO",
+					"-DHAVE_LZ4",
+					"-DUSE_OPENSSL",
+					"-DHAVE_JSONCPP",
+					"-DOPENVPN_EXTERNAL_TUN_FACTORY",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-L/opt/zerobrew/opt/openssl@3/lib",
+					"-L/opt/zerobrew/opt/fmt/lib",
+					"-L/opt/zerobrew/opt/jsoncpp/lib",
+					"-L/opt/zerobrew/opt/lz4/lib",
+					"-L/opt/zerobrew/opt/xxhash/lib",
+					"-lssl",
+					"-lcrypto",
+					"-lfmt",
+					"-ljsoncpp",
+					"-llz4",
+					"-lxxhash",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.macovpn.app.packet-tunnel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = MacOVPNPacketTunnel/Resources/MacOVPNPacketTunnel-Bridging-Header.h;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Debug;
@@ -471,6 +525,16 @@
 				CODE_SIGN_ENTITLEMENTS = MacOVPNPacketTunnel/Resources/MacOVPNPacketTunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				HEADER_SEARCH_PATHS = (
+					"/tmp/openvpn3",
+					"/opt/zerobrew/opt/asio/include",
+					"/opt/zerobrew/opt/openssl@3/include",
+					"/opt/zerobrew/opt/fmt/include",
+					"/opt/zerobrew/opt/jsoncpp/include",
+					"/opt/zerobrew/opt/lz4/include",
+					"/opt/zerobrew/opt/xxhash/include",
+				);
 				INFOPLIST_FILE = MacOVPNPacketTunnel/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -478,9 +542,33 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(inherited)",
+					"-DASIO_STANDALONE",
+					"-DUSE_ASIO",
+					"-DHAVE_LZ4",
+					"-DUSE_OPENSSL",
+					"-DHAVE_JSONCPP",
+					"-DOPENVPN_EXTERNAL_TUN_FACTORY",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-L/opt/zerobrew/opt/openssl@3/lib",
+					"-L/opt/zerobrew/opt/fmt/lib",
+					"-L/opt/zerobrew/opt/jsoncpp/lib",
+					"-L/opt/zerobrew/opt/lz4/lib",
+					"-L/opt/zerobrew/opt/xxhash/lib",
+					"-lssl",
+					"-lcrypto",
+					"-lfmt",
+					"-ljsoncpp",
+					"-llz4",
+					"-lxxhash",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.macovpn.app.packet-tunnel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = MacOVPNPacketTunnel/Resources/MacOVPNPacketTunnel-Bridging-Header.h;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 			};
 			name = Release;

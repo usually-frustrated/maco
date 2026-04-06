@@ -16,7 +16,7 @@ Use this with:
 - The upstream `OpenVPN 3 Core` macOS dependency path is also verified locally with `cmake` plus `zerobrew`-provided libraries.
 - The app currently implements:
   - menu bar launch and profile listing
-  - `.ovpn` import into `~/.config/MacOVPN/profiles/<UUID>/`
+  - `.ovpn` import into the shared app-group container at `<app-group>/MacOVPN/profiles/<UUID>/`
   - profile removal and open-folder support
   - import-time unsupported-directive warnings
   - Keychain-backed username/password save, replace, clear, and load
@@ -25,7 +25,7 @@ Use this with:
   - menu bar connect/disconnect actions for managed profiles
   - observed per-profile VPN state from `NEVPNStatusDidChange`
   - passive VPN notifications for connecting, connected, disconnecting, disconnected, and failed states
-- The packet tunnel now resolves provider payload, config paths, and shared credentials, then stops at a deliberate “OpenVPN core not implemented yet” error.
+- The packet tunnel now resolves provider payload, config paths, and shared credentials, then hands off to a compiling Objective-C++ OpenVPN bridge.
 
 ## What The Code Does Not Do Yet
 
@@ -53,7 +53,7 @@ Reason:
 
 - The app and extension now agree on profile identity, provider payload, and startup-time credential resolution.
 - The next missing layer is the actual OpenVPN engine and tunnel lifecycle integration for one profile.
-- Phase 7 should stop immediately if the extension cannot read the persisted `~/.config/MacOVPN/...` files under the signed sandbox model, because that is now the clearest concrete platform risk.
+- Phase 7 should verify that the packet tunnel can read the imported profile files from the shared app-group container under the signed sandbox model.
 - The dependency toolchain is already validated locally, so the next session should use it instead of spending time on setup discovery.
 
 ## Files Most Likely To Change First
@@ -68,9 +68,9 @@ Reason:
 - Keep the menu bar as the only app-owned control surface.
 - Keep files small and split by responsibility.
 - Avoid speculative wrappers around `NetworkExtension` or OpenVPN.
-- Preserve the current profile storage layout and Keychain shape unless a platform constraint forces a documented change.
+- Preserve the current Keychain shape unless a platform constraint forces a documented change.
 - Validate the multi-profile model early enough to avoid rework.
-- Phase 7 should explicitly verify whether the packet tunnel can read the current `~/.config/MacOVPN/...` paths under the signed sandbox model, because Phase 4 now persists those paths into the provider payload.
+- Phase 7 should explicitly verify whether the packet tunnel can read the shared app-group profile paths under the signed sandbox model.
 - Use the verified local dependency path:
   - `PATH=/opt/zerobrew/bin:$PATH`
   - `PKG_CONFIG_PATH=/opt/zerobrew/opt/openssl@3/lib/pkgconfig:/opt/zerobrew/opt/fmt/lib/pkgconfig:/opt/zerobrew/opt/jsoncpp/lib/pkgconfig:/opt/zerobrew/opt/lz4/lib/pkgconfig:/opt/zerobrew/opt/xxhash/lib/pkgconfig`

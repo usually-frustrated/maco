@@ -82,3 +82,6 @@ This file defines the operating rules for future implementation work on this rep
 - Leave docs updated only where the actual behavior or decisions changed.
 - Record blockers as concrete technical questions, not vague concerns.
 - When using sub-agents, assign narrow, disjoint ownership and merge back into the same architectural rules.
+- End every implementation session by updating the implementation logs and the handoff docs for the work that was actually completed, including pivots, blockers, and verification results.
+- If the session changed implementation direction or produced a new durable checkpoint, add or update a phase worklog in `docs/worklogs/` and update `docs/implementation-logs.md` so the record is discoverable.
+- Sub-agents must follow the same logging requirement for their assigned slice before handoff back to the main agent.
