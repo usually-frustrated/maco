@@ -13,6 +13,7 @@ Use this with:
 ## Verified Current State
 
 - The repo builds locally in Xcode for both `MacOVPN` and `MacOVPNPacketTunnel` with signing disabled.
+- The upstream `OpenVPN 3 Core` macOS dependency path is also verified locally with `cmake` plus `zerobrew`-provided libraries.
 - The app currently implements:
   - menu bar launch and profile listing
   - `.ovpn` import into `~/.config/MacOVPN/profiles/<UUID>/`
@@ -46,20 +47,20 @@ Use this with:
 
 ## Immediate Next Slice
 
-The next agent should start with Phase 7, while keeping scope to one real profile connection path.
+The next agent should start with Phase 7, while keeping scope to one real profile connection path and the smallest possible OpenVPN bridge surface.
 
 Reason:
 
 - The app and extension now agree on profile identity, provider payload, and startup-time credential resolution.
 - The next missing layer is the actual OpenVPN engine and tunnel lifecycle integration for one profile.
 - Phase 7 should stop immediately if the extension cannot read the persisted `~/.config/MacOVPN/...` files under the signed sandbox model, because that is now the clearest concrete platform risk.
-- The current local machine also lacks the official OpenVPN 3 Core macOS build prerequisites (`cmake` and Homebrew-managed dependencies), so dependency setup is a prerequisite before Phase 7 code changes can be completed here.
+- The dependency toolchain is already validated locally, so the next session should use it instead of spending time on setup discovery.
 
 ## Files Most Likely To Change First
 
-- new small files shared by the app and packet tunnel for startup payload or startup error handling
+- a small Objective-C++ bridge or wrapper for `OpenVPN 3 Core`
+- one or two packet-tunnel-only files for the client lifecycle and tunnel builder surface
 - `MacOVPNPacketTunnel/PacketTunnelProvider.swift`
-- `MacOVPN/VPN/VPNProviderPayload.swift`
 - `MacOVPNPacketTunnel/PacketTunnelStartupContext.swift`
 
 ## Guardrails
@@ -70,3 +71,9 @@ Reason:
 - Preserve the current profile storage layout and Keychain shape unless a platform constraint forces a documented change.
 - Validate the multi-profile model early enough to avoid rework.
 - Phase 7 should explicitly verify whether the packet tunnel can read the current `~/.config/MacOVPN/...` paths under the signed sandbox model, because Phase 4 now persists those paths into the provider payload.
+- Use the verified local dependency path:
+  - `PATH=/opt/zerobrew/bin:$PATH`
+  - `PKG_CONFIG_PATH=/opt/zerobrew/opt/openssl@3/lib/pkgconfig:/opt/zerobrew/opt/fmt/lib/pkgconfig:/opt/zerobrew/opt/jsoncpp/lib/pkgconfig:/opt/zerobrew/opt/lz4/lib/pkgconfig:/opt/zerobrew/opt/xxhash/lib/pkgconfig`
+  - `OPENSSL_ROOT_DIR=/opt/zerobrew/opt/openssl@3`
+  - `CMAKE_PREFIX_PATH=/opt/zerobrew/opt`
+- Keep Phase 7 to one profile and one engine path until the basic connection lifecycle is proven.
