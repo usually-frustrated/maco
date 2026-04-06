@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import os
 import UniformTypeIdentifiers
 
 final class MenuBarController: NSObject {
@@ -42,23 +43,32 @@ final class MenuBarController: NSObject {
         formatter.timeStyle = .short
         return formatter
     }()
+    private let logger = Logger(subsystem: "com.macovpn.app", category: "menu-bar")
 
     override init() {
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        print("DEBUG: MenuBarController is initializing...")
+        logger.info("MenuBarController init start")
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         super.init()
         configureStatusItem()
+        logger.info("MenuBarController init complete")
     }
 
     private func configureStatusItem() {
         if let button = statusItem.button {
+            logger.info("Status item button available")
+            button.title = "maco"
             button.image = NSImage(systemSymbolName: "lock.shield", accessibilityDescription: "maco")
-            button.imagePosition = .imageOnly
+            button.imagePosition = .imageLeading
+        } else {
+            logger.error("Status item button unavailable")
         }
 
         refreshMenu()
     }
 
     private func refreshMenu() {
+        logger.info("Refreshing menu")
         let listing = loadProfiles()
         cacheProfiles(from: listing)
         let status = status(for: listing)
