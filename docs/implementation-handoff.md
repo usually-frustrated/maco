@@ -94,6 +94,7 @@ Reason:
 - Increment the build number before each upload so TestFlight receives a unique archive.
 - The app icon now comes from the `Assets.xcassets` `AppIcon` asset, so the legacy `.icns` file is no longer part of the active bundle wiring.
 - The menu bar status item now renders the Unicode glyph `⦼` with a little padding instead of an image.
+- `MenuBarController.swift` is now a coordinator, with its menu, actions, state, and action-context code split into smaller files.
 
 ## Handoff To Next Thread
 

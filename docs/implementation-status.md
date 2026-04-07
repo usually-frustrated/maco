@@ -145,6 +145,7 @@ Key files:
 - Release signing has been moved to automatic distribution-oriented settings for archive-ready builds, but App Store upload still needs to be finished through Xcode Organizer with the developer account and provisioning profiles that match the Network Extension capability.
 - The app icon path now resolves from the `Assets.xcassets` `AppIcon` asset instead of the legacy `.icns` loader.
 - The menu bar now uses the Unicode glyph `⦼` with light padding instead of an image icon.
+- `MenuBarController.swift` has been split into smaller extension files to keep individual files near the repo's size target.
 
 ## Not Implemented Yet
 

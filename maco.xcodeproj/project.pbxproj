@@ -34,6 +34,11 @@
 		A00000010000000000000028 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000032 /* IOKit.framework */; };
 		A00000010000000000000029 /* ProfileImportWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000035 /* ProfileImportWarning.swift */; };
 		A00000010000000000000030 /* AppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000036 /* AppIcon.swift */; };
+		A00000010000000000000031 /* MenuBarController+Menus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000037 /* MenuBarController+Menus.swift */; };
+		A00000010000000000000032 /* MenuBarController+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000038 /* MenuBarController+Actions.swift */; };
+		A00000010000000000000033 /* MenuBarController+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000039 /* MenuBarController+State.swift */; };
+		A00000010000000000000034 /* ProfileActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000040 /* ProfileActionContext.swift */; };
+		A00000010000000000000035 /* MenuBarController+Connections.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000041 /* MenuBarController+Connections.swift */; };
 		DF2787682F84F2BF00EDBFF2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF2787672F84F2BF00EDBFF2 /* Assets.xcassets */; };
 		DFC4935E2F83719100DC9DF0 /* ProfileCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000019 /* ProfileCredentials.swift */; };
 		DFC4935F2F83719100DC9DF0 /* KeychainProfileCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000020 /* KeychainProfileCredentialStore.swift */; };
@@ -99,6 +104,11 @@
 		A00000110000000000000034 /* macopackettunnel-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "macopackettunnel-Bridging-Header.h"; sourceTree = "<group>"; };
 		A00000110000000000000035 /* ProfileImportWarning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImportWarning.swift; sourceTree = "<group>"; };
 		A00000110000000000000036 /* AppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcon.swift; sourceTree = "<group>"; };
+		A00000110000000000000037 /* MenuBarController+Menus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuBarController+Menus.swift"; sourceTree = "<group>"; };
+		A00000110000000000000038 /* MenuBarController+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuBarController+Actions.swift"; sourceTree = "<group>"; };
+		A00000110000000000000039 /* MenuBarController+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuBarController+State.swift"; sourceTree = "<group>"; };
+		A00000110000000000000040 /* ProfileActionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionContext.swift; sourceTree = "<group>"; };
+		A00000110000000000000041 /* MenuBarController+Connections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuBarController+Connections.swift"; sourceTree = "<group>"; };
 		DF2787672F84F2BF00EDBFF2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,6 +170,11 @@
 				A00000110000000000000001 /* AppDelegate.swift */,
 				A00000110000000000000015 /* AppNotificationCenter.swift */,
 				A00000110000000000000002 /* MenuBarController.swift */,
+				A00000110000000000000037 /* MenuBarController+Menus.swift */,
+				A00000110000000000000038 /* MenuBarController+Actions.swift */,
+				A00000110000000000000039 /* MenuBarController+State.swift */,
+				A00000110000000000000040 /* ProfileActionContext.swift */,
+				A00000110000000000000041 /* MenuBarController+Connections.swift */,
 				A00000110000000000000016 /* MenuBarStatus.swift */,
 				A00000110000000000000021 /* ProfileCredentialsPrompt.swift */,
 			);
@@ -361,6 +376,11 @@
 				A00000010000000000000030 /* AppIcon.swift in Sources */,
 				A00000010000000000000011 /* AppNotificationCenter.swift in Sources */,
 				A00000010000000000000002 /* MenuBarController.swift in Sources */,
+				A00000010000000000000031 /* MenuBarController+Menus.swift in Sources */,
+				A00000010000000000000032 /* MenuBarController+Actions.swift in Sources */,
+				A00000010000000000000033 /* MenuBarController+State.swift in Sources */,
+				A00000010000000000000034 /* ProfileActionContext.swift in Sources */,
+				A00000010000000000000035 /* MenuBarController+Connections.swift in Sources */,
 				A00000010000000000000012 /* MenuBarStatus.swift in Sources */,
 				A00000010000000000000017 /* ProfileCredentialsPrompt.swift in Sources */,
 				DFC4935E2F83719100DC9DF0 /* ProfileCredentials.swift in Sources */,
