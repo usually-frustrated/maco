@@ -2,7 +2,12 @@ import Foundation
 import NetworkExtension
 
 final class SystemVPNConnectionStore {
-    typealias StatusChangeHandler = (_ profileID: UUID, _ state: VPNConnectionState, _ disconnectError: String?) -> Void
+    struct VPNProfileInfo {
+        let id: UUID
+        let displayName: String
+    }
+
+    typealias StatusChangeHandler = (_ profileID: UUID, _ state: VPNConnectionState, _ disconnectError: Error?) -> Void
 
     private let statusChangeHandler: StatusChangeHandler?
     private var managersByProfileID: [UUID: NETunnelProviderManager] = [:]
@@ -41,10 +46,27 @@ final class SystemVPNConnectionStore {
         statesByProfileID[profileID]
     }
 
-    func connect(profileID: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
+    func loadedProfileInfos() -> [VPNProfileInfo] {
+        managersByProfileID.compactMap { profileID, manager in
+            guard let proto = manager.protocolConfiguration as? NETunnelProviderProtocol,
+                  let payload = VPNProviderPayload(providerConfiguration: proto.providerConfiguration)
+            else {
+                return nil
+            }
+            return VPNProfileInfo(id: profileID, displayName: payload.displayName)
+        }
+        .sorted {
+            if $0.displayName == $1.displayName {
+                return $0.id.uuidString < $1.id.uuidString
+            }
+            return $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending
+        }
+    }
+
+    func connect(profileID: UUID, options: [String: NSObject]? = nil, completion: @escaping (Result<Void, Error>) -> Void) {
         perform(profileID: profileID, completion: completion) { manager in
             do {
-                try manager.connection.startVPNTunnel()
+                try manager.connection.startVPNTunnel(options: options)
                 completion(.success(()))
             } catch {
                 completion(.failure(error))
@@ -140,7 +162,7 @@ final class SystemVPNConnectionStore {
                     let oldState = self.statesByProfileID[profileID]
                     guard oldState != nextState else { return }
                     self.statesByProfileID[profileID] = nextState
-                    statusChangeHandler?(profileID, nextState, error?.localizedDescription)
+                    statusChangeHandler?(profileID, nextState, error)
                 }
             }
         } else {

@@ -3,17 +3,17 @@ import Foundation
 struct VPNProviderPayload: Equatable, Sendable {
     static let managedByAppKey = "macoManagedByApp"
     static let profileIDKey = "macoProfileID"
-    static let profileDirectoryPathKey = "macoProfileDirectoryPath"
-    static let profileConfigPathKey = "macoProfileConfigPath"
+    static let displayNameKey = "macoDisplayName"
+    static let configContentKey = "macoConfigContent"
 
     let profileID: UUID
-    let profileDirectoryPath: String
-    let profileConfigPath: String
+    let displayName: String
+    let configContent: String
 
-    init(profileID: UUID, profileDirectoryPath: String, profileConfigPath: String) {
+    init(profileID: UUID, displayName: String, configContent: String) {
         self.profileID = profileID
-        self.profileDirectoryPath = profileDirectoryPath
-        self.profileConfigPath = profileConfigPath
+        self.displayName = displayName
+        self.configContent = configContent
     }
 
     init?(providerConfiguration: [String: Any]?) {
@@ -21,23 +21,23 @@ struct VPNProviderPayload: Equatable, Sendable {
               providerConfiguration[Self.managedByAppKey] as? Bool == true,
               let profileIDValue = providerConfiguration[Self.profileIDKey] as? String,
               let profileID = UUID(uuidString: profileIDValue),
-              let profileDirectoryPath = providerConfiguration[Self.profileDirectoryPathKey] as? String,
-              let profileConfigPath = providerConfiguration[Self.profileConfigPathKey] as? String
+              let displayName = providerConfiguration[Self.displayNameKey] as? String,
+              let configContent = providerConfiguration[Self.configContentKey] as? String
         else {
             return nil
         }
 
         self.profileID = profileID
-        self.profileDirectoryPath = profileDirectoryPath
-        self.profileConfigPath = profileConfigPath
+        self.displayName = displayName
+        self.configContent = configContent
     }
 
     var providerConfiguration: [String: Any] {
         [
             Self.managedByAppKey: true,
             Self.profileIDKey: profileID.uuidString,
-            Self.profileDirectoryPathKey: profileDirectoryPath,
-            Self.profileConfigPathKey: profileConfigPath
+            Self.displayNameKey: displayName,
+            Self.configContentKey: configContent
         ]
     }
 }

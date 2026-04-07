@@ -9,45 +9,56 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         options: [String: NSObject]?,
         completionHandler: @escaping (Error?) -> Void
     ) {
-        do {
-            let startupContext = try resolveStartupContext()
-            logger.log("Resolved packet tunnel startup for profile \(startupContext.payload.profileID.uuidString, privacy: .public)")
-            logger.log("Loaded profile config at \(startupContext.profileConfigURL.path, privacy: .public)")
-            if startupContext.credentials != nil {
-                logger.log("Loaded shared credentials for profile \(startupContext.payload.profileID.uuidString, privacy: .public)")
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self else {
+                completionHandler(NSError(
+                    domain: "com.macovpn.packet-tunnel",
+                    code: -1,
+                    userInfo: [NSLocalizedDescriptionKey: "Packet tunnel provider is no longer available."]
+                ))
+                return
             }
 
-            let bridge = OpenVPNPacketTunnelBridge(
-                profileConfigURL: startupContext.profileConfigURL,
-                profileID: startupContext.payload.profileID,
-                username: startupContext.credentials?.username,
-                password: startupContext.credentials?.password
-            )
-            self.bridge = bridge
-
-            bridge.start(
-                withPacketFlow: packetFlow,
-                applySettings: { [weak self] (settings: NEPacketTunnelNetworkSettings, settingsCompletion: @escaping (Error?) -> Void) in
-                    guard let self else {
-                        settingsCompletion(NSError(
-                            domain: "com.macovpn.packet-tunnel",
-                            code: -1,
-                            userInfo: [NSLocalizedDescriptionKey: "Packet tunnel provider is no longer available."]
-                        ))
-                        return
-                    }
-
-                    self.setTunnelNetworkSettings(settings) { error in
-                        settingsCompletion(error)
-                    }
-                },
-                completion: { error in
-                    completionHandler(error)
+            do {
+                let startupContext = try self.resolveStartupContext(options: options)
+                self.logger.log("Resolved packet tunnel startup for profile \(startupContext.payload.profileID.uuidString, privacy: .public)")
+                if startupContext.credentials != nil {
+                    self.logger.log("Loaded shared credentials for profile \(startupContext.payload.profileID.uuidString, privacy: .public)")
                 }
-            )
-        } catch {
-            logger.error("Packet tunnel startup failed: \(error.localizedDescription, privacy: .public)")
-            completionHandler(error)
+
+                let bridge = OpenVPNPacketTunnelBridge(
+                    profileConfigContent: startupContext.payload.configContent,
+                    profileID: startupContext.payload.profileID,
+                    username: startupContext.credentials?.username,
+                    password: startupContext.credentials?.password,
+                    response: startupContext.otp
+                )
+                self.bridge = bridge
+
+                bridge.start(
+                    withPacketFlow: self.packetFlow,
+                    applySettings: { [weak self] (settings: NEPacketTunnelNetworkSettings, settingsCompletion: @escaping (Error?) -> Void) in
+                        guard let self else {
+                            settingsCompletion(NSError(
+                                domain: "com.macovpn.packet-tunnel",
+                                code: -1,
+                                userInfo: [NSLocalizedDescriptionKey: "Packet tunnel provider is no longer available."]
+                            ))
+                            return
+                        }
+
+                        self.setTunnelNetworkSettings(settings) { error in
+                            settingsCompletion(error)
+                        }
+                    },
+                    completion: { error in
+                        completionHandler(error)
+                    }
+                )
+            } catch {
+                self.logger.error("Packet tunnel startup failed: \(error.localizedDescription, privacy: .public)")
+                completionHandler(error)
+            }
         }
     }
 
@@ -58,10 +69,10 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         completionHandler()
     }
 
-    private func resolveStartupContext() throws -> PacketTunnelStartupContext {
+    private func resolveStartupContext(options: [String: NSObject]?) throws -> PacketTunnelStartupContext {
         guard let providerProtocol = protocolConfiguration as? NETunnelProviderProtocol else {
             throw PacketTunnelStartupError.invalidProviderPayload
         }
-        return try PacketTunnelStartupContext.load(from: providerProtocol)
+        return try PacketTunnelStartupContext.load(from: providerProtocol, options: options)
     }
 }

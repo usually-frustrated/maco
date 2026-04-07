@@ -8,10 +8,11 @@ typedef void (^OpenVPNPacketTunnelSettingsApplier)(NEPacketTunnelNetworkSettings
                                                     OpenVPNPacketTunnelSettingsCompletion completion);
 
 @interface OpenVPNPacketTunnelBridge : NSObject
-- (instancetype)initWithProfileConfigURL:(NSURL *)profileConfigURL
+- (instancetype)initWithProfileConfigContent:(NSString *)profileConfigContent
                                profileID:(NSUUID *)profileID
-                               username:(nullable NSString *)username
-                               password:(nullable NSString *)password;
+                                username:(nullable NSString *)username
+                                password:(nullable NSString *)password
+                                response:(nullable NSString *)response;
 
 - (void)applyTunnelSettings:(NEPacketTunnelNetworkSettings *)settings
                  completion:(OpenVPNPacketTunnelSettingsCompletion)completion;

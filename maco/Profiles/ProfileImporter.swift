@@ -19,31 +19,43 @@ final class ProfileImporter {
         "auth", "auth-nocache", "auth-token", "auth-user-pass", "ca", "cert", "cipher",
         "client", "comp-lzo", "compress", "compress-stub-v2", "connect-retry",
         "connect-timeout", "data-ciphers", "data-ciphers-fallback", "dev", "dhcp-option",
-        "disable-occ", "explicit-exit-notify", "float", "ifconfig", "inactive", "key",
+        "dev-type", "disable-occ", "explicit-exit-notify", "float", "ifconfig", "inactive", "key",
         "key-direction", "keepalive", "mssfix", "mute-replay-warnings", "nobind", "persist-key",
-        "persist-remote-ip", "persist-tun", "proto", "pull", "pull-filter", "remote",
-        "remote-cert-eku", "remote-cert-tls", "redirect-gateway", "reneg-sec", "resolv-retry",
-        "route", "script-security", "setenv", "setenv-safe", "tls-auth", "tls-client",
-        "tls-cipher", "tls-crypt", "tls-version-min", "tun-mtu", "verify-x509-name", "verb"
+        "persist-remote-ip", "persist-tun", "proto", "pull", "pull-filter", "push-peer-info",
+        "remote", "remote-cert-eku", "remote-cert-tls", "redirect-gateway", "reneg-sec",
+        "resolv-retry", "route", "script-security", "server-poll-timeout", "setenv", "setenv-safe",
+        "static-challenge", "tls-auth", "tls-client", "tls-cipher", "tls-crypt",
+        "tls-version-min", "tun-mtu", "verify-x509-name", "verb"
     ]
 
-    func analyze(fileURL: URL) throws -> ProfileImportAnalysis {
+    func contents(from fileURL: URL) throws -> String {
         guard let contents = readContents(from: fileURL) else {
             throw ProfileImportError.unreadableProfile
         }
 
-        let warnings = analyze(contents: contents)
+        return contents
+    }
+
+    func analyze(fileURL: URL) throws -> ProfileImportAnalysis {
+        let contents = try contents(from: fileURL)
+        return try analyze(contents: contents, sourceFileName: fileURL.lastPathComponent)
+    }
+
+    func analyze(contents: String, sourceFileName: String) throws -> ProfileImportAnalysis {
         guard containsDirective(in: contents) else {
             throw ProfileImportError.emptyProfile
         }
 
-        let displayName = fileURL.deletingPathExtension().lastPathComponent
+        let warnings = analyze(contents: contents)
+        let displayName = (sourceFileName as NSString)
+            .deletingPathExtension
             .replacingOccurrences(of: "_", with: " ")
             .replacingOccurrences(of: "-", with: " ")
             .trimmingCharacters(in: .whitespacesAndNewlines)
 
         return ProfileImportAnalysis(
             displayName: displayName.isEmpty ? "Imported Profile" : displayName,
+            content: contents,
             warnings: warnings
         )
     }
@@ -144,5 +156,6 @@ final class ProfileImporter {
 
 struct ProfileImportAnalysis {
     let displayName: String
+    let content: String
     let warnings: [ProfileImportWarning]
 }

@@ -5,13 +5,13 @@ import UniformTypeIdentifiers
 
 final class MenuBarController: NSObject {
     private enum ProfileListState {
-        case loaded([ProfileRecord])
+        case loaded([SystemVPNConnectionStore.VPNProfileInfo])
         case failed(String)
     }
 
     private enum CredentialState {
         case unavailable
-          case missing
+        case missing
         case saved(username: String)
 
         var isSaved: Bool {
@@ -26,66 +26,42 @@ final class MenuBarController: NSObject {
     }
 
     private let statusItem: NSStatusItem
-    private let store = ProfileStore.shared
     private let credentialStore: ProfileCredentialStoring = KeychainProfileCredentialStore.shared
     private let credentialPrompt = ProfileCredentialsPrompt()
+    private let profileImporter = ProfileImporter()
     private let vpnConfigurationStore = SystemVPNConfigurationStore()
-    private lazy var vpnConnectionStore = SystemVPNConnectionStore(statusChangeHandler: { [weak self] profileID, state, errorMessage in
-        self?.handleVPNStatusChange(profileID: profileID, state: state, disconnectErrorMessage: errorMessage)
+    private lazy var vpnConnectionStore = SystemVPNConnectionStore(statusChangeHandler: { [weak self] profileID, state, error in
+        self?.handleVPNStatusChange(profileID: profileID, state: state, disconnectError: error)
     })
     private let notifier = AppNotificationCenter.shared
     private var profileNamesByID: [UUID: String] = [:]
     private var vpnStatesByProfileID: [UUID: VPNConnectionState] = [:]
     private var disconnectingProfileIDs: Set<UUID> = []
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter
-    }()
     private let logger = Logger(subsystem: "com.macovpn.app", category: "menu-bar")
 
     override init() {
-        print("!!! DEBUG: MenuBarController init STARTING !!!")
-        // Using standard print for terminal visibility and os_log for Console.app
-        NSLog("!!! DEBUG: MenuBar	BarController init STARTING !!!")
-        
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         super.init()
-        
-        print("!!! DEBUG: MenuBarController init SUPER.init() COMPLETE !!!")
-        NSLog("!!! DEBUG: MenuBarController init SUPER.init() COMPLETE !!!")
-        
         configureStatusItem()
-        logger.info("MenuBarController init complete")
     }
 
     private func configureStatusItem() {
-        print("!!! DEBUG: configureStatusItem called !!!")
         if let button = statusItem.button {
-            logger.info("Status item button available")
-            button.title = "maco"
-            button.image = NSImage(systemSymbolName: "lock.shield", accessibilityDescription: "maco")
-            button.imagePosition = .imageLeading
+            button.image = AppIcon.menuBarImage
+            button.imagePosition = .imageOnly
+            button.title = ""
         } else {
             logger.error("Status item button unavailable")
-            print("!!! DEBUG: Status item button was NIL !!!")
         }
 
         refreshMenu()
+        synchronizeVPNStates()
     }
 
     private func refreshMenu() {
-        logger.info("Refreshing menu")
         let listing = loadProfiles()
         cacheProfiles(from: listing)
-        let status = status(for: listing)
-        updateStatusItem(using: status)
-
-        if case .loaded(let profiles) = listing {
-            reconcileVPNConfigurations(with: profiles)
-        }
-
+        updateStatusItem(using: status(for: listing))
         statusItem.menu = makeMenu(using: listing)
     }
 
@@ -96,7 +72,7 @@ final class MenuBarController: NSObject {
         menu.addItem(disabledItem(title: status.title))
         menu.addItem(.separator())
         menu.addItem(actionItem(title: "Import .ovpn...", action: #selector(importProfile)))
-        menu.addItem(actionItem(title: "Open Profiles Folder", action: #selector(openProfilesFolder)))
+        menu.addItem(actionItem(title: "Open VPN Settings...", action: #selector(openVPNSettings)))
         menu.addItem(.separator())
         menu.addItem(disabledItem(title: "Profiles"))
 
@@ -117,38 +93,17 @@ final class MenuBarController: NSObject {
     }
 
     private func loadProfiles() -> ProfileListState {
-        do {
-            return .loaded(try store.listProfiles())
-        } catch {
-            return .failed("Could not load profiles")
-        }
-    }
-
-    private func reconcileVPNConfigurations(with profiles: [ProfileRecord]) {
-        vpnConfigurationStore.reconcile(profiles: profiles) { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success:
-                self.synchronizeVPNStates()
-            case .failure(let error):
-                self.notifier.notifyFailure(
-                    title: "VPN Configuration Sync Failed",
-                    message: error.localizedDescription
-                )
-            }
-        }
+        .loaded(vpnConnectionStore.loadedProfileInfos())
     }
 
     private func status(for listing: ProfileListState) -> MenuBarStatus {
         switch listing {
         case .loaded(let profiles):
-            let warningCount = profiles.reduce(into: 0) { $0 += $1.warnings.count }
             let activeStates = profiles.map { vpnState(for: $0.id) }
             let connectedCount = activeStates.filter { $0.isConnected }.count
             let busyCount = activeStates.filter { $0.isBusy }.count
             return .status(
                 profileCount: profiles.count,
-                warningCount: warningCount,
                 connectedCount: connectedCount,
                 busyCount: busyCount
             )
@@ -159,24 +114,20 @@ final class MenuBarController: NSObject {
 
     private func updateStatusItem(using status: MenuBarStatus) {
         guard let button = statusItem.button else { return }
-        button.image = NSImage(systemSymbolName: status.symbolName, accessibilityDescription: "maco")
         button.toolTip = status.toolTip
+        button.image = AppIcon.menuBarImage
     }
 
-    private func profileMenuItem(for profile: ProfileRecord) -> NSMenuItem {
+    private func profileMenuItem(for profile: SystemVPNConnectionStore.VPNProfileInfo) -> NSMenuItem {
         let item = NSMenuItem(title: profile.displayName, action: nil, keyEquivalent: "")
         let submenu = NSMenu(title: profile.displayName)
-        let credentialState = loadCredentialState(for: profile)
+        let credentialState = loadCredentialState(for: profile.id)
 
-        submenu.addItem(disabledItem(title: profile.sourceFileName))
-        submenu.addItem(disabledItem(title: "Imported \(dateFormatter.string(from: profile.importedAt))"))
-        submenu.addItem(disabledItem(title: warningSummary(for: profile)))
-        submenu.addItem(disabledItem(title: credentialSummary(for: credentialState)))
-        submenu.addItem(disabledItem(title: connectionSummary(for: profile)))
+        submenu.addItem(disabledItem(title: "Status: \(vpnState(for: profile.id).label)"))
         submenu.addItem(.separator())
 
         let credentialItem = actionItem(
-            title: credentialSB(credentialState) ? "Replace Credentials…" : "Set Saved Credentials…",
+            title: credentialState.isSaved ? "Replace Credentials..." : "Set Credentials...",
             action: #selector(editCredentials(_:))
         )
         credentialItem.representedObject = ProfileActionContext(
@@ -187,7 +138,7 @@ final class MenuBarController: NSObject {
         submenu.addItem(credentialItem)
 
         if credentialState.isSaved {
-            let clearItem = actionItem(title: "Clear Saved Credentials…", action: #selector(clearCredentials(_:)))
+            let clearItem = actionItem(title: "Clear Credentials...", action: #selector(clearCredentials(_:)))
             clearItem.representedObject = ProfileActionContext(
                 id: profile.id,
                 displayName: profile.displayName,
@@ -198,12 +149,11 @@ final class MenuBarController: NSObject {
 
         submenu.addItem(.separator())
 
-        let connectionState = vpnState(for: profile.id)
         let connectionItem = actionItem(
-            title: connectionState.actionTitle,
+            title: vpnState(for: profile.id).actionTitle,
             action: #selector(toggleProfileConnection(_:))
         )
-        connectionItem.isEnabled = connectionState.actionEnabled
+        connectionItem.isEnabled = vpnState(for: profile.id).actionEnabled
         connectionItem.representedObject = ProfileActionContext(
             id: profile.id,
             displayName: profile.displayName,
@@ -211,61 +161,19 @@ final class MenuBarController: NSObject {
         )
         submenu.addItem(connectionItem)
 
-        let removeItem = actionItem(title: "Remove Profile…", action: #selector(removeProfile(_:)))
-        removeItem.representedObject = ProfileActionContext(
-            id: profile.id,
-            displayName: profile.displayName,
-            savedUsername: credentialState.savedUsername
-        )
-        submenu.addItem(removeItem)
-
         item.submenu = submenu
         return item
     }
 
-    private func loadCredentialState(for profile: ProfileRecord) -> CredentialState {
+    private func loadCredentialState(for profileID: UUID) -> CredentialState {
         do {
-            guard let credentials = try credentialStore.loadCredentials(for: profile.intID) else { // Note: assuming fix for id vs intID if needed, but keeping original logic structure
-                return .missing
-            }
-            // Wait, looking at your provided code, it was loadCredentials(for: profile.id). 
-            // I will revert to the exact property name from your previous snippet to avoid breaking compilation.
-            return .missing // Placeholder for logic check
-        } catch {
-            return .unavailable
-        }
-    }
-    
-    // Re-implementing exactly as provided in your source to ensure no breakage
-    private func loadCredentialStateOriginal(for profile: ProfileRecord) -> CredentialState {
-        do {
-            guard let credentials = try credentialStore.loadCredentials(for: profile.id) else {
+            guard let credentials = try credentialStore.loadCredentials(for: profileID) else {
                 return .missing
             }
             return .saved(username: credentials.username)
         } catch {
             return .unavailable
         }
-    }
-
-    private func credentialSummary(for state: CredentialState) -> String {
-        switch state {
-        case .unavailable:
-            return "Saved credentials unavailable"
-        case .missing:
-            return "No saved credentials"
-        case .saved(let username):
-            return "Saved credentials: \(username)"
-        }
-    }
-
-    private func warningSummary(for profile: ProfileRecord) -> String {
-        guard !profile.warnings.isEmpty else { return "No import warnings" }
-        return "\(profile.warnings.count) import warning\(profile.warnings.count == 1 ? "" : "s")"
-    }
-
-    private func connectionSummary(for profile: ProfileRecord) -> String {
-        "Status: \(vpnState(for: profile.id).label)"
     }
 
     private func vpnState(for profileID: UUID) -> VPNConnectionState {
@@ -277,7 +185,7 @@ final class MenuBarController: NSObject {
         case .loaded(let profiles):
             profileNamesByID = Dictionary(uniqueKeysWithValues: profiles.map { ($0.id, $0.displayName) })
             vpnStatesByProfileID = profiles.reduce(into: [:]) { result, profile in
-                result[profile.id] = vpnStatesByProfileID[profile.id] ?? .disconnected
+                result[profile.id] = vpnConnectionStore.connectionState(for: profile.id) ?? .disconnected
             }
         case .failed:
             profileNamesByID.removeAll()
@@ -296,15 +204,19 @@ final class MenuBarController: NSObject {
                 return
             }
 
-            self.refreshCachedVPNStates()
-            self.renderMenu()
+            let loadedProfileInfos = self.vpnConnectionStore.loadedProfileInfos()
+            self.cleanupOrphanedCredentials(validProfileIDs: Set(loadedProfileInfos.map(\.id)))
+            self.refreshMenu()
         }
     }
 
-    private func refreshCachedVPNStates() {
-        guard case .loaded(let profiles) = loadProfiles() else { return }
-        vpnStatesByProfileID = profiles.reduce(into: [:]) { result, profile in
-            result[profile.id] = vpnConnectionStore.connectionState(for: profile.id) ?? .disconnected
+    private func cleanupOrphanedCredentials(validProfileIDs: Set<UUID>) {
+        guard let storedProfileIDs = try? credentialStore.storedProfileIDs() else {
+            return
+        }
+
+        for profileID in storedProfileIDs where !validProfileIDs.contains(profileID) {
+            try? credentialStore.removeCredentials(for: profileID)
         }
     }
 
@@ -318,12 +230,6 @@ final class MenuBarController: NSObject {
         let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
         item.target = self
         return item
-    }
-
-    private func renderMenu() {
-        let listing = loadProfiles()
-        statusItem.menu = makeMenu(using: listing)
-        updateStatusItem(using: status(for: listing))
     }
 
     @objc
@@ -344,68 +250,53 @@ final class MenuBarController: NSObject {
         }
 
         do {
-            let result = try store.importProfile(from: sourceURL)
-            notifier.notifyImportSuccess(
-                profileName: result.record.displayName,
-                warningCount: result.warnings.count
-            )
-            promptForCredentialsIfNeeded(for: result.record)
-            refreshMenu()
+            let contents = try profileImporter.contents(from: sourceURL)
+            let analysis = try profileImporter.analyze(contents: contents, sourceFileName: sourceURL.lastPathComponent)
+            let profileName = analysis.displayName
+
+            if !analysis.warnings.isEmpty {
+                let warningText = analysis.warnings
+                    .map { "Line \($0.line) [\($0.directive)]: \($0.message)" }
+                    .joined(separator: "\n")
+                presentAlert(
+                    title: "Imported \"\(profileName)\" with \(analysis.warnings.count) warning\(analysis.warnings.count == 1 ? "" : "s")",
+                    message: warningText
+                )
+            }
+
+            guard let credentials = credentialPrompt.prompt(profileName: profileName) else {
+                return
+            }
+
+            vpnConfigurationStore.addProfile(displayName: profileName, configContent: analysis.content) { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let profileID):
+                    self.notifier.notifyImportSuccess(profileName: profileName, warningCount: analysis.warnings.count)
+                    do {
+                        try self.credentialStore.saveCredentials(credentials, for: profileID)
+                        self.notifier.notifyCredentialsSaved(profileName: profileName)
+                    } catch {
+                        self.notifier.notifyFailure(title: "Credentials Not Saved", message: error.localizedDescription)
+                        self.presentAlert(title: "Credentials Not Saved", message: error.localizedDescription)
+                    }
+                    self.synchronizeVPNStates()
+                case .failure(let error):
+                    let detail = self.detailedError(error)
+                    self.notifier.notifyFailure(title: "Import Failed", message: detail)
+                    self.presentAlert(title: "Import Failed", message: detail)
+                }
+            }
         } catch {
-            notifier.notifyFailure(title: "Import Failed", message: error.localizedDescription)
-            presentAlert(title: "Import Failed", message: error.localizedDescription)
+            let detail = detailedError(error)
+            notifier.notifyFailure(title: "Import Failed", message: detail)
+            presentAlert(title: "Import Failed", message: detail)
         }
-    }
-
-    private func promptForCredentialsIfNeeded(for profile: ProfileRecord) {
-        guard let credentials = credentialPrompt.prompt(profileName: profile.displayName) else {
-            return
-        }
-
-        do {
-            try credentialStore.saveCredentials(credentials, for: profile.intID) // Note: using id logic from original
-            notifier.notifyCredentialsSaved(profileName: profile.displayName)
-        } catch {
-            notifier.notifyFailure(title: "Credentials Not Saved", message: error.localizedDescription)
-            presentAlert(title: "Credentials Not Saved", message: error.localizedDescription)
-        }
-    }
-
-    // Helper to avoid compilation errors with the logic I was trying to write
-    private func credentialSB(_ state: CredentialState) -> Bool {
-        return state.isSaved
     }
 
     @objc
-    private func openProfilesFolder() {
-        if !store.openProfilesFolder() {
-            notifier.notifyFailure(title: "Could Not Open Folder", message: store.profilesFolderURL.path)
-            presentAlert(title: "Could Not Open Folder", message: store.profilesFolderURL.path)
-        }
-    }
-
-    @objc
-    private func removeProfile(_ sender: NSMenuItem) {
-        guard let context = sender.representedObject as? ProfileActionContext else {
-            return
-        }
-
-        guard confirmRemoval(for: context.displayName) else {
-            return
-        }
-
-        do {
-            try credentialStore.removeCredentials(for: context.id)
-            try store.removeProfile(id: context.id)
-            disconnectingProfileIDs.remove(context.id)
-            vpnStatesByProfileID.removeValue(forKey: context.id)
-            profileNamesByID.removeValue(forKey: context.id)
-            notifier.notifyRemoval(profileName: context.displayName)
-            refreshMenu()
-        } catch {
-            notifier.notifyFailure(title: "Remove Failed", message: error.localizedDescription)
-            presentAlert(title: "Remove Failed", message: error.localizedDescription)
-        }
+    private func openVPNSettings() {
+        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Network-Settings-Extension")!)
     }
 
     @objc
@@ -468,17 +359,33 @@ final class MenuBarController: NSObject {
     }
 
     private func connectProfile(with context: ProfileActionContext) {
-        vpnConnectionStore.connect(profileID: context.id) { [weak self] result in
+        guard let otp = credentialPrompt.promptForOTP(profileName: context.displayName) else {
+            return
+        }
+
+        vpnStatesByProfileID[context.id] = .connecting
+        refreshMenu()
+
+        var options: [String: NSObject] = [:]
+        if let credentials = try? credentialStore.loadCredentials(for: context.id) {
+            options["username"] = credentials.username as NSString
+            options["password"] = credentials.password as NSString
+        }
+        if !otp.isEmpty {
+            options["otp"] = otp as NSString
+        }
+
+        vpnConnectionStore.connect(profileID: context.id, options: options.isEmpty ? nil : options) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success:
-                self.vpnStatesByProfileID[context.id] = .connecting
-                self.renderMenu()
+                self.refreshMenu()
             case .failure(let error):
-                self.vpnStatesByProfileID[context.id] = .failed(error.localizedDescription)
-                self.notifier.notifyVPNFailed(profileName: context.displayName, message: error.localizedDescription)
-                self.presentAlert(title: "VPN Connect Failed", message: error.localizedDescription)
-                self.renderMenu()
+                let detail = self.detailedError(error)
+                self.vpnStatesByProfileID[context.id] = .failed(detail)
+                self.notifier.notifyVPNFailed(profileName: context.displayName, message: detail)
+                self.presentAlert(title: "VPN Connection Failed", message: detail)
+                self.refreshMenu()
             }
         }
     }
@@ -490,13 +397,12 @@ final class MenuBarController: NSObject {
             switch result {
             case .success:
                 self.vpnStatesByProfileID[context.id] = .disconnecting
-                self.renderMenu()
+                self.refreshMenu()
             case .failure(let error):
                 self.disconnectingProfileIDs.remove(context.id)
                 self.vpnStatesByProfileID[context.id] = .failed(error.localizedDescription)
                 self.notifier.notifyVPNFailed(profileName: context.displayName, message: error.localizedDescription)
-                self.presentAlert(title: "VPN Disconnect Failed", message: error.localizedDescription)
-                self.renderMenu()
+                self.refreshMenu()
             }
         }
     }
@@ -504,17 +410,17 @@ final class MenuBarController: NSObject {
     private func handleVPNStatusChange(
         profileID: UUID,
         state: VPNConnectionState,
-        disconnectErrorMessage: String?
+        disconnectError: Error?
     ) {
         let previousState = vpnStatesByProfileID[profileID] ?? .disconnected
         vpnStatesByProfileID[profileID] = state
         guard let profileName = profileNamesByID[profileID] else {
-            renderMenu()
+            refreshMenu()
             return
         }
 
         guard previousState != state else {
-            renderMenu()
+            refreshMenu()
             return
         }
 
@@ -525,31 +431,20 @@ final class MenuBarController: NSObject {
             notifier.notifyVPNConnected(profileName: profileName)
         case .disconnecting:
             notifier.notifyVPNDisconnecting(profileName: profileName)
-        case .failed(let message):
-            notifier.notifyVPNFailed(profileName: profileName, message: message ?? "The VPN disconnected unexpectedly.")
+        case .failed:
+            let failureMessage = disconnectError.map { detailedError($0) }
+                ?? "The VPN disconnected unexpectedly. No additional details available."
+            notifier.notifyVPNFailed(profileName: profileName, message: failureMessage)
         case .disconnected:
-            if disconnectingProfileIDs.remove(profileID) != nil {
-                notifier.notifyVPNDisconnected(profileName: profileName)
-            } else {
-                notifier.notifyVPNDisconnected(profileName: profileName)
-            }
+            disconnectingProfileIDs.remove(profileID)
+            notifier.notifyVPNDisconnected(profileName: profileName)
         case .reasserting:
             notifier.notifyVPNConnecting(profileName: profileName)
         case .invalid:
             break
         }
 
-        renderMenu()
-    }
-
-    private func confirmRemoval(for displayName: String) -> Bool {
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.messageText = "Remove this profile?"
-        alert.informativeText = displayName
-        alert.addButton(withTitle: "Remove")
-        alert.addButton(withTitle: "Cancel")
-        return alert.runModal() == .alertFirstButtonReturn
+        refreshMenu()
     }
 
     private func confirmCredentialClear(for displayName: String) -> Bool {
@@ -563,12 +458,25 @@ final class MenuBarController: NSObject {
     }
 
     private func presentAlert(title: String, message: String) {
+        NSApp.activate(ignoringOtherApps: true)
         let alert = NSAlert()
         alert.alertStyle = .informational
+        alert.icon = AppIcon.applicationImage
         alert.messageText = title
         alert.informativeText = message
         alert.addButton(withTitle: "OK")
         alert.runModal()
+    }
+
+    private func detailedError(_ error: Error) -> String {
+        var lines: [String] = []
+        var current: Error? = error
+        while let err = current {
+            let ns = err as NSError
+            lines.append("\(err.localizedDescription) [\(ns.domain) \(ns.code)]")
+            current = ns.userInfo[NSUnderlyingErrorKey] as? Error
+        }
+        return lines.joined(separator: "\n↳ ")
     }
 
     @objc

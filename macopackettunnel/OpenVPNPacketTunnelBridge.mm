@@ -1,4 +1,5 @@
 #import "OpenVPNPacketTunnelBridge.h"
+#import <os/log.h>
 
 #include <client/ovpncli.cpp>
 #include <openvpn/crypto/data_epoch.cpp>
@@ -16,6 +17,12 @@ using namespace openvpn;
 namespace {
 
 static NSString *const OpenVPNPacketTunnelErrorDomain = @"com.macovpn.packet-tunnel";
+
+static os_log_t OpenVPNLog()
+{
+    static os_log_t log = os_log_create("com.macovpn.app.packet-tunnel", "OpenVPN");
+    return log;
+}
 
 static NSError *BridgeError(NSString *message, NSInteger code = 1)
 {
@@ -587,17 +594,19 @@ class PacketFlowTunClientFactory final : public TunClientFactory {
 class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
   public:
     PacketTunnelOpenVPNClient(OpenVPNPacketTunnelBridge *bridge,
-                              NSURL *profileConfigURL,
+                              NSString *profileConfigContent,
                               NSString *profileID,
                               NSString *username,
                               NSString *password,
+                              NSString *response,
                               NEPacketTunnelFlow *packetFlow,
                               std::shared_ptr<PacketTunnelSetupState> setupState)
         : bridge_(bridge),
-          profileConfigURL_(profileConfigURL),
+          profileConfigContent_(profileConfigContent),
           profileID_(profileID),
           username_(username),
           password_(password),
+          response_(response),
           packetFlow_(packetFlow),
           setupState_(std::move(setupState))
     {
@@ -618,14 +627,17 @@ class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
 
     void event(const ClientAPI::Event &ev) override
     {
+        os_log(OpenVPNLog(), "event name=%{public}s info=%{public}s error=%d fatal=%d",
+               ev.name.c_str(), ev.info.c_str(), ev.error, ev.fatal);
         if (ev.error && ev.fatal && !setupState_->finished.load()) {
             setupState_->setErrorText(ev.info);
             setupState_->finished.store(true);
         }
     }
 
-    void log(const ClientAPI::LogInfo &) override
+    void log(const ClientAPI::LogInfo &info) override
     {
+        os_log(OpenVPNLog(), "log: %{public}s", info.text.c_str());
     }
 
     void external_pki_cert_request(ClientAPI::ExternalPKICertRequest &) override
@@ -654,17 +666,7 @@ class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
     {
         ClientAPI::Status status;
         @autoreleasepool {
-            NSError *readError = nil;
-            NSString *content = [NSString stringWithContentsOfURL:profileConfigURL_
-                                                        encoding:NSUTF8StringEncoding
-                                                           error:&readError];
-            if (!content) {
-                status.error = true;
-                status.message = readError.localizedDescription.UTF8String ?: "Unable to read profile config.";
-                setupState_->setErrorText(status.message);
-                setupState_->finished.store(true);
-                return status;
-            }
+            NSString *content = profileConfigContent_ ?: @"";
 
             ClientAPI::OpenVPNClientHelper helper;
             const auto merged = helper.merge_config_string(StdStringFromNSString(content));
@@ -701,6 +703,11 @@ class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
                 ClientAPI::ProvideCreds creds;
                 creds.username = StdStringFromNSString(username_);
                 creds.password = StdStringFromNSString(password_);
+                // response_ holds the TOTP/static-challenge answer.
+                // OpenVPN3 expects this in creds.response, NOT appended to the password.
+                if (response_.length > 0) {
+                    creds.response = StdStringFromNSString(response_);
+                }
                 const auto provided = provide_creds(creds);
                 if (provided.error) {
                     status.error = true;
@@ -722,10 +729,11 @@ class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
 
   private:
     OpenVPNPacketTunnelBridge *bridge_ = nil;
-    NSURL *profileConfigURL_ = nil;
+    NSString *profileConfigContent_ = @"";
     NSString *profileID_ = @"";
     NSString *username_ = @"";
     NSString *password_ = @"";
+    NSString *response_ = @"";
     NEPacketTunnelFlow *packetFlow_ = nil;
     std::shared_ptr<PacketTunnelSetupState> setupState_;
     std::unique_ptr<PacketFlowTunClientFactory> tunFactory_;
@@ -739,10 +747,11 @@ class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
 @end
 
 @implementation OpenVPNPacketTunnelBridge {
-    NSURL *_profileConfigURL;
+    NSString *_profileConfigContent;
     NSUUID *_profileID;
     NSString *_username;
     NSString *_password;
+    NSString *_response;
     OpenVPNPacketTunnelSettingsApplier _applySettings;
     std::unique_ptr<PacketTunnelOpenVPNClient> _client;
     std::thread _worker;
@@ -750,17 +759,19 @@ class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
     std::shared_ptr<PacketTunnelSetupState> _setupState;
 }
 
-- (instancetype)initWithProfileConfigURL:(NSURL *)profileConfigURL
+- (instancetype)initWithProfileConfigContent:(NSString *)profileConfigContent
                                profileID:(NSUUID *)profileID
-                               username:(nullable NSString *)username
-                               password:(nullable NSString *)password
+                                username:(nullable NSString *)username
+                                password:(nullable NSString *)password
+                                response:(nullable NSString *)response
 {
     self = [super init];
     if (self) {
-        _profileConfigURL = [profileConfigURL copy];
+        _profileConfigContent = [profileConfigContent copy];
         _profileID = [profileID copy];
         _username = [username copy];
         _password = [password copy];
+        _response = [response copy];
     }
     return self;
 }
@@ -782,10 +793,11 @@ class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
     _applySettings = [applySettings copy];
     _setupState = std::make_shared<PacketTunnelSetupState>();
     _client = std::make_unique<PacketTunnelOpenVPNClient>(self,
-                                                          _profileConfigURL,
+                                                          _profileConfigContent,
                                                           _profileID.UUIDString,
                                                           _username,
                                                           _password,
+                                                          _response,
                                                           packetFlow,
                                                           _setupState);
 
@@ -797,18 +809,20 @@ class PacketTunnelOpenVPNClient final : public ClientAPI::OpenVPNClient {
 
         _worker = std::thread([client = _client.get(), setupState = _setupState]() mutable {
             ClientAPI::Status connectStatus = client->connect();
-        if (!setupState->finished.load() && !setupState->currentErrorText().empty()) {
-            setupState->finished.store(true);
-        }
-        if (connectStatus.error && !setupState->finished.load()) {
-            setupState->setErrorText(connectStatus.message);
-            setupState->finished.store(true);
-        }
-    });
+            os_log(OpenVPNLog(), "connect() returned: error=%d message=%{public}s",
+                   connectStatus.error, connectStatus.message.c_str());
+            if (!setupState->finished.load() && !setupState->currentErrorText().empty()) {
+                setupState->finished.store(true);
+            }
+            if (connectStatus.error && !setupState->finished.load()) {
+                setupState->setErrorText(connectStatus.message);
+                setupState->finished.store(true);
+            }
+        });
 
     const CFTimeInterval startTime = CFAbsoluteTimeGetCurrent();
     while (!_setupState->finished.load()) {
-        if ((CFAbsoluteTimeGetCurrent() - startTime) > 30.0) {
+        if ((CFAbsoluteTimeGetCurrent() - startTime) > 120.0) {
             [self stop];
             completion(BridgeError(@"Timed out waiting for tunnel startup."));
             return;

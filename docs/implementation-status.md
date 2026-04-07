@@ -137,16 +137,14 @@ Key files:
 
 ## Current Stop Point
 
-- The repo is now in Phase 7 work, with the packet tunnel bridge and lifecycle wiring compiling.
+- The repo is in the post-refactor Phase 7 state: embedded provider config, menu-state updates, tunnel startup flow, and icon wiring are all in place.
 - The project has been renamed to `maco`, and the packet tunnel source tree now lives under `macopackettunnel/`.
-- The renamed project builds locally with `xcodebuild -project maco.xcodeproj -scheme maco -configuration Debug -sdk macosx -derivedDataPath /tmp/maco-derived CODE_SIGNING_ALLOWED=NO build`.
-- The next incomplete part of Phase 7 is runtime validation of one real OpenVPN 3 Core connection path for one profile.
-- Profile storage has moved to the shared app-group container so the packet tunnel extension can read the imported profile files under sandbox.
-- Signed-runtime validation of the packet tunnel read path is still pending in this environment; the code path is in place, but the sandboxed extension has not been proven on a real signed launch yet.
+- The current build passes with `xcodebuild -project maco.xcodeproj -scheme maco -configuration Debug build`.
+- The connection flow now shows `Connecting` immediately in the menu, and the tunnel startup path no longer hits the earlier settings timeout in the latest repro.
+- VPN Settings now shows the app icon from the extension bundle as well as the app bundle.
 
 ## Not Implemented Yet
 
-- OpenVPN 3 Core dependency integration
 - Connect-time credential prompting
 - TOTP challenge flow
 - Multi-profile concurrent connection validation
@@ -164,7 +162,8 @@ Key files:
 - Verified the upstream `OpenVPN 3 Core` macOS build path in `/tmp/openvpn3` using `cmake` plus `zerobrew`-provided dependencies, including a successful `ovpncli` build
 - Local `xcodebuild` verification after Phase 7 bridge wiring with `-derivedDataPath /tmp/macovpn-derived CODE_SIGNING_ALLOWED=NO`
 - Local `xcodebuild` verification after the `maco` rename with `-derivedDataPath /tmp/maco-derived CODE_SIGNING_ALLOWED=NO`
-- Additional Phase 7 runtime probe attempt for the signed sandboxed packet-tunnel read path was not completed cleanly in this environment, so the runtime file-access check remains the open blocker.
+- Local `xcodebuild` verification after the embedded-config and connection-status follow-up with default signing enabled
+- Fresh connection repro after clearing stale diagnostic logs completed without the previous `NEVPNConnectionErrorDomain 12` failure
 - Review passes that resulted in fixes for:
   - non-default profile-store root handling
   - tolerant profile decoding
@@ -174,13 +173,16 @@ Key files:
   - provider payload storage using plain property-list values instead of opaque encoded bytes
   - the correct Swift `NEVPNConnection.startVPNTunnel()` call and explicit failed-state handling in the menu
   - packet tunnel credential requirements limited to configs that actually declare `auth-user-pass`
+  - immediate `Connecting` UI state on connect start
+  - backgrounded packet-tunnel startup to avoid tunnel-settings timeout
+  - extension bundle icon metadata and resource copy for VPN Settings
 
 ## Notes For The Next Session
 
 - The implementation logs are the intended handoff entry point for status.
 - The architecture, product, and phase docs remain the source of truth for intended behavior and sequencing.
-- Use [Implementation Handoff](./implementation-handoff.md) as the starting brief for the next Phase 7 implementation session.
+- Use [Implementation Handoff](./implementation-handoff.md) as the starting brief for the next implementation session.
 - The app now installs and reconciles system VPN configurations per imported profile.
 - The menu bar now exposes connection actions and observed VPN state for managed profiles.
-- The packet tunnel now resolves provider payload, config paths, and shared credentials, then hands off to a compiling Objective-C++ OpenVPN bridge.
-- OpenVPN 3 Core integration and runtime connection validation are still required before the connection phase can be considered complete.
+- The packet tunnel now resolves provider payload, config content, and shared credentials, then hands off to a compiling Objective-C++ OpenVPN bridge.
+- The current remaining work is product hardening, not basic connect flow or bundle wiring.
