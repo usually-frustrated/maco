@@ -32,7 +32,6 @@ final class MenuBarController: NSObject {
     var vpnStatesByProfileID: [UUID: VPNConnectionState] = [:]
     var disconnectingProfileIDs: Set<UUID> = []
     let logger = Logger(subsystem: "com.macovpn.app", category: "menu-bar")
-    static let menuBarTitle = " ⦼ "
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -68,8 +67,11 @@ final class MenuBarController: NSObject {
     func updateStatusItem(using status: MenuBarStatus) {
         guard let button = statusItem.button else { return }
         button.toolTip = status.toolTip
-        button.image = nil
-        button.imagePosition = .noImage
-        button.title = Self.menuBarTitle
+        button.title = ""
+        if let image = NSImage(systemSymbolName: status.symbolName, accessibilityDescription: nil) {
+            image.isTemplate = true
+            button.image = image
+            button.imagePosition = .imageOnly
+        }
     }
 }

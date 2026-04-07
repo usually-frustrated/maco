@@ -4,6 +4,15 @@ enum MenuBarStatus {
     case empty
     case ready(profileCount: Int, connectedCount: Int, busyCount: Int)
 
+    var symbolName: String {
+        switch self {
+        case .empty:
+            return "shield"
+        case .ready(_, let connectedCount, let busyCount):
+            return (connectedCount > 0 || busyCount > 0) ? "lock.shield.fill" : "lock.shield"
+        }
+    }
+
     var title: String {
         switch self {
         case .empty:
