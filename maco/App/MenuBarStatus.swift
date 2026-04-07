@@ -4,12 +4,14 @@ enum MenuBarStatus {
     case empty
     case ready(profileCount: Int, connectedCount: Int, busyCount: Int)
 
-    var symbolName: String {
+    var imageName: String {
         switch self {
         case .empty:
-            return "shield"
+            return "MenuBarIcon"
         case .ready(_, let connectedCount, let busyCount):
-            return (connectedCount > 0 || busyCount > 0) ? "lock.shield.fill" : "lock.shield"
+            if connectedCount > 0 { return "MenuBarIconConnected" }
+            if busyCount > 0 { return "MenuBarIconConnecting" }
+            return "MenuBarIcon"
         }
     }
 

@@ -19,7 +19,13 @@ extension MenuBarController {
     }
 
     func connectProfile(with context: ProfileActionContext) {
-        guard let otp = credentialPrompt.promptForOTP(profileName: context.displayName) else {
+        isPromptingForOTP = true
+        refreshMenu()
+        let otp = credentialPrompt.promptForOTP(profileName: context.displayName)
+        isPromptingForOTP = false
+
+        guard let otp else {
+            refreshMenu()
             return
         }
 

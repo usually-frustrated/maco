@@ -31,6 +31,7 @@ final class MenuBarController: NSObject {
     var profileNamesByID: [UUID: String] = [:]
     var vpnStatesByProfileID: [UUID: VPNConnectionState] = [:]
     var disconnectingProfileIDs: Set<UUID> = []
+    var isPromptingForOTP = false
     let logger = Logger(subsystem: "com.macovpn.app", category: "menu-bar")
 
     override init() {
@@ -68,7 +69,8 @@ final class MenuBarController: NSObject {
         guard let button = statusItem.button else { return }
         button.toolTip = status.toolTip
         button.title = ""
-        if let image = NSImage(systemSymbolName: status.symbolName, accessibilityDescription: nil) {
+        let imageName = isPromptingForOTP ? "MenuBarIconWaitingForOTP" : status.imageName
+        if let image = NSImage(named: imageName) {
             image.isTemplate = true
             button.image = image
             button.imagePosition = .imageOnly
