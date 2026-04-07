@@ -40,6 +40,7 @@
 		A00000010000000000000034 /* ProfileActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000040 /* ProfileActionContext.swift */; };
 		A00000010000000000000035 /* MenuBarController+Connections.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000041 /* MenuBarController+Connections.swift */; };
 		DF2787682F84F2BF00EDBFF2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF2787672F84F2BF00EDBFF2 /* Assets.xcassets */; };
+		DF2787762F85168100EDBFF2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF2787672F84F2BF00EDBFF2 /* Assets.xcassets */; };
 		DFC4935E2F83719100DC9DF0 /* ProfileCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000019 /* ProfileCredentials.swift */; };
 		DFC4935F2F83719100DC9DF0 /* KeychainProfileCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000020 /* KeychainProfileCredentialStore.swift */; };
 		DFC493602F83719100DC9DF0 /* VPNProviderPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000022 /* VPNProviderPayload.swift */; };
@@ -298,6 +299,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A00000070000000000000002 /* Build configuration list for PBXNativeTarget "macopackettunnel" */;
 			buildPhases = (
+				DF2787772F8519BF00EDBFF2 /* Compile C++ Deps */,
 				A00000060000000000000002 /* Sources */,
 				A00000040000000000000002 /* Frameworks */,
 				A00000080000000000000002 /* Resources */,
@@ -353,7 +355,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DF2787682F84F2BF00EDBFF2 /* Assets.xcassets in Resources */,
+				DF2787762F85168100EDBFF2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +368,42 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DF2787772F8519BF00EDBFF2 /* Compile C++ Deps */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/scripts/build-deps.sh",
+				"$(SRCROOT)/.git/modules/deps/openssl/HEAD",
+				"$(SRCROOT)/.git/modules/deps/fmt/HEAD",
+				"$(SRCROOT)/.git/modules/deps/jsoncpp/HEAD",
+				"$(SRCROOT)/.git/modules/deps/lz4/HEAD",
+				"$(SRCROOT)/.git/modules/deps/xxhash/HEAD",
+				"$(SRCROOT)/.git/modules/deps/asio/HEAD",
+				"$(SRCROOT)/.git/modules/deps/openvpn3/HEAD",
+				"$(SRCROOT)/.gitmodules",
+			);
+			name = "Compile C++ Deps";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/deps/built/lib/libssl.a",
+				"$(SRCROOT)/deps/built/lib/libcrypto.a",
+				"$(SRCROOT)/deps/built/lib/libfmt.a",
+				"$(SRCROOT)/deps/built/lib/libjsoncpp.a",
+				"$(SRCROOT)/deps/built/lib/liblz4.a",
+				"$(SRCROOT)/deps/built/lib/libxxhash.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n$SRCROOT/scripts/build-deps.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A00000060000000000000001 /* Sources */ = {
@@ -586,9 +624,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_ENTITLEMENTS = macopackettunnel/Resources/macopackettunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
@@ -649,9 +687,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_ENTITLEMENTS = macopackettunnel/Resources/macopackettunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
