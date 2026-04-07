@@ -8,6 +8,7 @@ extension MenuBarController {
         menu.addItem(.separator())
         menu.addItem(actionItem(title: "Import .ovpn...", action: #selector(importProfile)))
         menu.addItem(actionItem(title: "Open VPN Settings...", action: #selector(openVPNSettings)))
+        menu.addItem(actionItem(title: "Show Logs...", action: #selector(showLogs)))
         menu.addItem(.separator())
         menu.addItem(disabledItem(title: "Profiles"))
 

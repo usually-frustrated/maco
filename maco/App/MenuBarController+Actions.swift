@@ -106,6 +106,19 @@ extension MenuBarController {
     }
 
     @objc
+    func showLogs() {
+        // Opens Terminal running `log stream` filtered to this app's os_log subsystem.
+        // Shows live logs from the current session for both the app and the tunnel extension.
+        let script = #"""
+        tell application "Terminal"
+            activate
+            do script "log stream --predicate 'subsystem BEGINSWITH \"com.macovpn.app\"' --level debug"
+        end tell
+        """#
+        NSAppleScript(source: script)?.executeAndReturnError(nil)
+    }
+
+    @objc
     func quit() {
         NSApp.terminate(nil)
     }

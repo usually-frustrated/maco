@@ -114,7 +114,11 @@ extension MenuBarController {
         alert.messageText = title
         alert.informativeText = message
         alert.addButton(withTitle: "OK")
-        alert.runModal()
+        alert.addButton(withTitle: "Copy")
+        if alert.runModal() == .alertSecondButtonReturn {
+            NSPasteboard.general.clearContents()
+            NSPasteboard.general.setString("\(title)\n\(message)", forType: .string)
+        }
     }
 
     func detailedError(_ error: Error) -> String {
