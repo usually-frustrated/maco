@@ -21,6 +21,7 @@ Get the project into a state where a beta build can be archived and uploaded thr
 - The project file now references the asset catalog for both targets instead of the legacy `AppIcon.icns` resource.
 - The menu bar controller now sets the status button title to `⦼` with padding instead of using an image.
 - `MenuBarController.swift` is now a coordinator file, with menu actions, menu construction, state handling, and action context split into dedicated files.
+- The app and packet-tunnel extension now share the same build number so Xcode's embedded-binary validation passes cleanly.
 
 ## Blockers
 

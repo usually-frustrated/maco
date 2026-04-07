@@ -146,6 +146,7 @@ Key files:
 - The app icon path now resolves from the `Assets.xcassets` `AppIcon` asset instead of the legacy `.icns` loader.
 - The menu bar now uses the Unicode glyph `⦼` with light padding instead of an image icon.
 - `MenuBarController.swift` has been split into smaller extension files to keep individual files near the repo's size target.
+- The app and packet-tunnel extension now share matching build numbers, which clears Xcode's embedded-binary validation warning.
 
 ## Not Implemented Yet
 

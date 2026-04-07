@@ -95,6 +95,7 @@ Reason:
 - The app icon now comes from the `Assets.xcassets` `AppIcon` asset, so the legacy `.icns` file is no longer part of the active bundle wiring.
 - The menu bar status item now renders the Unicode glyph `⦼` with a little padding instead of an image.
 - `MenuBarController.swift` is now a coordinator, with its menu, actions, state, and action-context code split into smaller files.
+- The app and packet tunnel build numbers now match, which keeps embedded binary validation clean during archive and build flows.
 
 ## Handoff To Next Thread
 
