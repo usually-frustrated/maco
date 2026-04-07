@@ -13,18 +13,17 @@ mkdir -p "$BUILD" "$INTERMEDIATE"
 
 # ── OpenSSL ────────────────────────────────────────────────────────────────
 echo "▸ building openssl"
-mkdir -p "$INTERMEDIATE/openssl"
-cd "$INTERMEDIATE/openssl"
+cd "$DEPS/openssl"
 if [ "$ARCH" = "arm64" ]; then
     OPENSSL_TARGET="darwin64-arm64-cc"
 else
     OPENSSL_TARGET="darwin64-x86_64-cc"
 fi
-"$DEPS/openssl/Configure" "$OPENSSL_TARGET" \
+./Configure "$OPENSSL_TARGET" \
     --prefix="$BUILD" \
     --openssldir="$BUILD/ssl" \
     -mmacosx-version-min="$DEPLOYMENT_TARGET" \
-    no-shared no-tests no-docs
+    no-shared no-tests no-docs no-fips
 make -j"$NCPU"
 make install_sw   # skips docs/man pages
 

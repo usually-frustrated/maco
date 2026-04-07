@@ -10,6 +10,7 @@
 [submodule "deps/openssl"]
 	path = deps/openssl
 	url = https://github.com/openssl/openssl
+	ignore = dirty
 [submodule "deps/jsoncpp"]
 	path = deps/jsoncpp
 	url = https://github.com/open-source-parsers/jsoncpp
