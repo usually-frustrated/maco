@@ -85,6 +85,16 @@ Reason:
 - Signed packet-tunnel runtime validation of the shared app-group profile read path is still unresolved in this environment.
 - The next implementation step is to prove the packet tunnel can launch under a signed sandboxed build and read `config.ovpn` from `<app-group>/maco/profiles/<UUID>/config.ovpn` before expanding the OpenVPN bridge further.
 
+## Beta Release Prep
+
+- Xcode Release signing should stay on automatic management with the shared team selected; do not hard-code an Apple Distribution identity in build settings.
+- The app and packet tunnel targets both need the Network Extension, App Sandbox, App Groups, and Keychain Sharing capabilities aligned with their entitlements.
+- Use Xcode `Product > Archive`, then `Distribute App > App Store Connect > Upload` from Organizer for the beta build.
+- If provisioning fails, refresh signing assets in Xcode `Settings > Accounts` and confirm Apple has approved the Network Extension entitlement for both bundle IDs.
+- Increment the build number before each upload so TestFlight receives a unique archive.
+- The app icon now comes from the `Assets.xcassets` `AppIcon` asset, so the legacy `.icns` file is no longer part of the active bundle wiring.
+- The menu bar status item now renders the Unicode glyph `⦼` with a little padding instead of an image.
+
 ## Handoff To Next Thread
 
 - Start from `maco.xcodeproj` and the `maco` scheme.

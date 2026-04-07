@@ -142,6 +142,9 @@ Key files:
 - The current build passes with `xcodebuild -project maco.xcodeproj -scheme maco -configuration Debug build`.
 - The connection flow now shows `Connecting` immediately in the menu, and the tunnel startup path no longer hits the earlier settings timeout in the latest repro.
 - VPN Settings now shows the app icon from the extension bundle as well as the app bundle.
+- Release signing has been moved to automatic distribution-oriented settings for archive-ready builds, but App Store upload still needs to be finished through Xcode Organizer with the developer account and provisioning profiles that match the Network Extension capability.
+- The app icon path now resolves from the `Assets.xcassets` `AppIcon` asset instead of the legacy `.icns` loader.
+- The menu bar now uses the Unicode glyph `⦼` with light padding instead of an image icon.
 
 ## Not Implemented Yet
 
@@ -186,3 +189,4 @@ Key files:
 - The menu bar now exposes connection actions and observed VPN state for managed profiles.
 - The packet tunnel now resolves provider payload, config content, and shared credentials, then hands off to a compiling Objective-C++ OpenVPN bridge.
 - The current remaining work is product hardening, not basic connect flow or bundle wiring.
+- Beta release work now shifts to archive/distribution verification in Xcode, plus App Store Connect setup for TestFlight submission.

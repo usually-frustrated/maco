@@ -47,9 +47,9 @@ final class MenuBarController: NSObject {
 
     private func configureStatusItem() {
         if let button = statusItem.button {
-            button.image = AppIcon.menuBarImage
-            button.imagePosition = .imageOnly
-            button.title = ""
+            button.image = nil
+            button.imagePosition = .noImage
+            button.title = " ⦼ "
         } else {
             logger.error("Status item button unavailable")
         }
@@ -115,7 +115,9 @@ final class MenuBarController: NSObject {
     private func updateStatusItem(using status: MenuBarStatus) {
         guard let button = statusItem.button else { return }
         button.toolTip = status.toolTip
-        button.image = AppIcon.menuBarImage
+        button.image = nil
+        button.imagePosition = .noImage
+        button.title = " ⦼ "
     }
 
     private func profileMenuItem(for profile: SystemVPNConnectionStore.VPNProfileInfo) -> NSMenuItem {

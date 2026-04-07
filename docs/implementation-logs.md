@@ -16,3 +16,4 @@ Use the other docs for product intent, locked architecture, and phase definition
 - [Phase 7: OpenVPN Bridge Slice](./worklogs/2026-04-05-phase-7-openvpn-bridge-slice.md)
 - [2026-04-07: Embedded Manager Profile Config Refactor](./worklogs/2026-04-07-embedded-manager-profile-config.md)
 - [2026-04-07: Connection Status And Tunnel Startup Fix](./worklogs/2026-04-07-connection-status-timeout-fix.md)
+- [2026-04-07: Beta Release Prep](./worklogs/2026-04-07-beta-release-prep.md)
