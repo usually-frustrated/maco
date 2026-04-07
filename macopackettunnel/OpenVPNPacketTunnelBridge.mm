@@ -16,11 +16,11 @@ using namespace openvpn;
 
 namespace {
 
-static NSString *const OpenVPNPacketTunnelErrorDomain = @"com.macovpn.packet-tunnel";
+static NSString *const OpenVPNPacketTunnelErrorDomain = @"frustrated.maco.packet-tunnel";
 
 static os_log_t OpenVPNLog()
 {
-    static os_log_t log = os_log_create("com.macovpn.app.packet-tunnel", "OpenVPN");
+    static os_log_t log = os_log_create("frustrated.maco.app.packet-tunnel", "OpenVPN");
     return log;
 }
 
@@ -524,7 +524,7 @@ class PacketFlowTunClient final : public TunClient {
 
             for (NSData *packet in packets) {
                 const auto *bytes = static_cast<const unsigned char *>(packet.bytes);
-                BufferAllocated buf(bytes, packet.length, BufAllocFlags::NO_FLAGS);
+                BufferAllocated buf(bytes, packet.length, 0);
                 openvpn_io::post(ioContext_, [client, packet = std::move(buf)]() mutable {
                     if (!client->stopped_) {
                         client->parent_.tun_recv(packet);

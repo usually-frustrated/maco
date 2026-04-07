@@ -15,7 +15,7 @@ enum SystemVPNConfigurationStoreError: Error, LocalizedError {
 final class SystemVPNConfigurationStore {
     private let providerBundleIdentifier: String
 
-    init(providerBundleIdentifier: String = "com.macovpn.app.packet-tunnel") {
+    init(providerBundleIdentifier: String = "frustrated.maco.app.packet-tunnel") {
         self.providerBundleIdentifier = providerBundleIdentifier
     }
 

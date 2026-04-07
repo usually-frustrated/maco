@@ -22,7 +22,7 @@ final class KeychainProfileCredentialStore: ProfileCredentialStoring {
     private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
 
-    init(serviceName: String = "com.macovpn.credentials") {
+    init(serviceName: String = "frustrated.maco.credentials") {
         self.serviceName = serviceName
         jsonEncoder = JSONEncoder()
         jsonDecoder = JSONDecoder()

@@ -112,7 +112,7 @@ extension MenuBarController {
         let script = #"""
         tell application "Terminal"
             activate
-            do script "log stream --predicate 'subsystem BEGINSWITH \"com.macovpn.app\"' --level debug"
+            do script "log stream --predicate 'subsystem BEGINSWITH \"frustrated.maco.app\"' --level debug"
         end tell
         """#
         NSAppleScript(source: script)?.executeAndReturnError(nil)

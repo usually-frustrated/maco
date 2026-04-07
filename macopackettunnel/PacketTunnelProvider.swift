@@ -2,12 +2,12 @@ import NetworkExtension
 import os.log
 
 final class PacketTunnelProvider: NEPacketTunnelProvider {
-    private let logger = Logger(subsystem: "com.macovpn.app.packet-tunnel", category: "PacketTunnel")
+    private let logger = Logger(subsystem: "frustrated.maco.app.packet-tunnel", category: "PacketTunnel")
     private var bridge: OpenVPNPacketTunnelBridge?
 
     private static func unavailableError() -> NSError {
         NSError(
-            domain: "com.macovpn.packet-tunnel",
+            domain: "frustrated.maco.packet-tunnel",
             code: -1,
             userInfo: [NSLocalizedDescriptionKey: "Packet tunnel provider is no longer available."]
         )

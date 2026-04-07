@@ -32,7 +32,7 @@ final class MenuBarController: NSObject {
     var vpnStatesByProfileID: [UUID: VPNConnectionState] = [:]
     var disconnectingProfileIDs: Set<UUID> = []
     var isPromptingForOTP = false
-    let logger = Logger(subsystem: "com.macovpn.app", category: "menu-bar")
+    let logger = Logger(subsystem: "frustrated.maco.app", category: "menu-bar")
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)

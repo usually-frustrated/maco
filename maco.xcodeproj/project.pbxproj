@@ -80,7 +80,7 @@
 		A00000110000000000000006 /* macopackettunnel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macopackettunnel.entitlements; sourceTree = "<group>"; };
 		A00000110000000000000007 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A00000110000000000000008 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
-		A00000110000000000000009 /* maco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = maco.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00000110000000000000009 /* maco..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = maco..app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000110000000000000010 /* macopackettunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = macopackettunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000110000000000000011 /* ProfileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImporter.swift; sourceTree = "<group>"; };
 		A00000110000000000000015 /* AppNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotificationCenter.swift; sourceTree = "<group>"; };
@@ -227,7 +227,7 @@
 		A00000050000000000000009 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A00000110000000000000009 /* maco.app */,
+				A00000110000000000000009 /* maco..app */,
 				A00000110000000000000010 /* macopackettunnel.appex */,
 			);
 			name = Products;
@@ -292,7 +292,7 @@
 			);
 			name = maco;
 			productName = maco;
-			productReference = A00000110000000000000009 /* maco.app */;
+			productReference = A00000110000000000000009 /* maco..app */;
 			productType = "com.apple.product-type.application";
 		};
 		A00000100000000000000003 /* macopackettunnel */ = {
@@ -378,15 +378,6 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/scripts/build-deps.sh",
-				"$(SRCROOT)/.git/modules/deps/openssl/HEAD",
-				"$(SRCROOT)/.git/modules/deps/fmt/HEAD",
-				"$(SRCROOT)/.git/modules/deps/jsoncpp/HEAD",
-				"$(SRCROOT)/.git/modules/deps/lz4/HEAD",
-				"$(SRCROOT)/.git/modules/deps/xxhash/HEAD",
-				"$(SRCROOT)/.git/modules/deps/asio/HEAD",
-				"$(SRCROOT)/.git/modules/deps/openvpn3/HEAD",
-				"$(SRCROOT)/.gitmodules",
 			);
 			name = "Compile C++ Deps";
 			outputFileListPaths = (
@@ -401,7 +392,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n$SRCROOT/scripts/build-deps.sh\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nfor lib in libssl.a libcrypto.a libfmt.a libjsoncpp.a liblz4.a libxxhash.a; do\n    if [ ! -f \"$SRCROOT/deps/built/lib/$lib\" ]; then\n        echo \"error: Missing $lib — run ./scripts/build-deps.sh first\"\n        exit 1\n    fi\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -560,7 +551,7 @@
 				CODE_SIGN_ENTITLEMENTS = maco/Resources/maco.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 5G2TDMV275;
 				ENABLE_APP_SANDBOX = YES;
@@ -584,8 +575,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.macovpn.app;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = frustrated.maco.app;
+				PRODUCT_NAME = maco.;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -599,7 +590,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = maco/Resources/maco.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 5G2TDMV275;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -612,8 +603,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.macovpn.app;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = frustrated.maco.app;
+				PRODUCT_NAME = maco.;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -629,7 +620,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_ENTITLEMENTS = macopackettunnel/Resources/macopackettunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 5G2TDMV275;
 				ENABLE_APP_SANDBOX = YES;
@@ -644,11 +635,7 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/deps/openvpn3",
-					"$(SRCROOT)/deps/asio/asio/include",
-					"$(SRCROOT)/deps/built/include",
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = macopackettunnel/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -674,12 +661,17 @@
 					"$(SRCROOT)/deps/built/lib/liblz4.a",
 					"$(SRCROOT)/deps/built/lib/libxxhash.a",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.macovpn.app.packet-tunnel";
+				PRODUCT_BUNDLE_IDENTIFIER = "frustrated.maco.app.packet-tunnel";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "macopackettunnel/Resources/macopackettunnel-Bridging-Header.h";
+				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = (
+					"$(SRCROOT)/deps/openvpn3",
+					"$(SRCROOT)/deps/asio/asio/include",
+					"$(SRCROOT)/deps/built/include",
+				);
 			};
 			name = Debug;
 		};
@@ -692,7 +684,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_ENTITLEMENTS = macopackettunnel/Resources/macopackettunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 5G2TDMV275;
 				ENABLE_APP_SANDBOX = YES;
@@ -707,11 +699,7 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/deps/openvpn3",
-					"$(SRCROOT)/deps/asio/asio/include",
-					"$(SRCROOT)/deps/built/include",
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = macopackettunnel/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -737,12 +725,17 @@
 					"$(SRCROOT)/deps/built/lib/liblz4.a",
 					"$(SRCROOT)/deps/built/lib/libxxhash.a",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.macovpn.app.packet-tunnel";
+				PRODUCT_BUNDLE_IDENTIFIER = "frustrated.maco.app.packet-tunnel";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "macopackettunnel/Resources/macopackettunnel-Bridging-Header.h";
+				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = (
+					"$(SRCROOT)/deps/built/include",
+					"$(SRCROOT)/deps/asio/asio/include",
+					"$(SRCROOT)/deps/openvpn3",
+				);
 			};
 			name = Release;
 		};
