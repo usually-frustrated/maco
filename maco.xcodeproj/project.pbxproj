@@ -607,13 +607,9 @@
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				HEADER_SEARCH_PATHS = (
-					/tmp/openvpn3,
-					/opt/zerobrew/opt/asio/include,
-					"/opt/zerobrew/opt/openssl@3/include",
-					/opt/zerobrew/opt/fmt/include,
-					/opt/zerobrew/opt/jsoncpp/include,
-					/opt/zerobrew/opt/lz4/include,
-					/opt/zerobrew/opt/xxhash/include,
+					"$(SRCROOT)/deps/openvpn3",
+					"$(SRCROOT)/deps/asio/asio/include",
+					"$(SRCROOT)/deps/built/include",
 				);
 				INFOPLIST_FILE = macopackettunnel/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -633,12 +629,12 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"/opt/zerobrew/Cellar/openssl@3/3.6.1/lib/libssl.a",
-					"/opt/zerobrew/Cellar/openssl@3/3.6.1/lib/libcrypto.a",
-					"/opt/zerobrew/opt/fmt/lib/libfmt.a",
-					"/opt/zerobrew/opt/jsoncpp/lib/libjsoncpp.a",
-					"/opt/zerobrew/opt/lz4/lib/liblz4.a",
-					"/opt/zerobrew/opt/xxhash/lib/libxxhash.a",
+					"$(SRCROOT)/deps/built/lib/libssl.a",
+					"$(SRCROOT)/deps/built/lib/libcrypto.a",
+					"$(SRCROOT)/deps/built/lib/libfmt.a",
+					"$(SRCROOT)/deps/built/lib/libjsoncpp.a",
+					"$(SRCROOT)/deps/built/lib/liblz4.a",
+					"$(SRCROOT)/deps/built/lib/libxxhash.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.macovpn.app.packet-tunnel";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -674,13 +670,9 @@
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				HEADER_SEARCH_PATHS = (
-					/tmp/openvpn3,
-					/opt/zerobrew/opt/asio/include,
-					"/opt/zerobrew/opt/openssl@3/include",
-					/opt/zerobrew/opt/fmt/include,
-					/opt/zerobrew/opt/jsoncpp/include,
-					/opt/zerobrew/opt/lz4/include,
-					/opt/zerobrew/opt/xxhash/include,
+					"$(SRCROOT)/deps/openvpn3",
+					"$(SRCROOT)/deps/asio/asio/include",
+					"$(SRCROOT)/deps/built/include",
 				);
 				INFOPLIST_FILE = macopackettunnel/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -700,12 +692,12 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"/opt/zerobrew/Cellar/openssl@3/3.6.1/lib/libssl.a",
-					"/opt/zerobrew/Cellar/openssl@3/3.6.1/lib/libcrypto.a",
-					"/opt/zerobrew/opt/fmt/lib/libfmt.a",
-					"/opt/zerobrew/opt/jsoncpp/lib/libjsoncpp.a",
-					"/opt/zerobrew/opt/lz4/lib/liblz4.a",
-					"/opt/zerobrew/opt/xxhash/lib/libxxhash.a",
+					"$(SRCROOT)/deps/built/lib/libssl.a",
+					"$(SRCROOT)/deps/built/lib/libcrypto.a",
+					"$(SRCROOT)/deps/built/lib/libfmt.a",
+					"$(SRCROOT)/deps/built/lib/libjsoncpp.a",
+					"$(SRCROOT)/deps/built/lib/liblz4.a",
+					"$(SRCROOT)/deps/built/lib/libxxhash.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.macovpn.app.packet-tunnel";
 				PRODUCT_NAME = "$(TARGET_NAME)";
