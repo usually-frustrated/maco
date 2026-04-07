@@ -25,18 +25,9 @@ final class SystemVPNConfigurationStore {
         completion: @escaping (Result<UUID, Error>) -> Void
     ) {
         let profileID = UUID()
-        let manager = makeManager(
-            profileID: profileID,
-            displayName: displayName,
-            configContent: configContent
-        )
+        let manager = makeManager(profileID: profileID, displayName: displayName, configContent: configContent)
         save(manager: manager) { result in
-            switch result {
-            case .success:
-                DispatchQueue.main.async { completion(.success(profileID)) }
-            case .failure(let error):
-                DispatchQueue.main.async { completion(.failure(error)) }
-            }
+            completion(result.map { profileID })
         }
     }
 
@@ -89,27 +80,8 @@ final class SystemVPNConfigurationStore {
         }
     }
 
-    private func makeManager(
-        profileID: UUID,
-        displayName: String,
-        configContent: String
-    ) -> NETunnelProviderManager {
+    private func makeManager(profileID: UUID, displayName: String, configContent: String) -> NETunnelProviderManager {
         let manager = NETunnelProviderManager()
-        configure(
-            manager: manager,
-            profileID: profileID,
-            displayName: displayName,
-            configContent: configContent
-        )
-        return manager
-    }
-
-    private func configure(
-        manager: NETunnelProviderManager,
-        profileID: UUID,
-        displayName: String,
-        configContent: String
-    ) {
         let protocolConfiguration = NETunnelProviderProtocol()
         protocolConfiguration.providerBundleIdentifier = providerBundleIdentifier
         protocolConfiguration.providerConfiguration = VPNProviderPayload(
@@ -118,10 +90,10 @@ final class SystemVPNConfigurationStore {
             configContent: configContent
         ).providerConfiguration
         protocolConfiguration.serverAddress = displayName
-
         manager.localizedDescription = displayName
         manager.protocolConfiguration = protocolConfiguration
         manager.isEnabled = true
+        return manager
     }
 
     private func payload(for manager: NETunnelProviderManager) -> VPNProviderPayload? {

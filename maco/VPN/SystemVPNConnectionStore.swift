@@ -9,6 +9,7 @@ final class SystemVPNConnectionStore {
 
     typealias StatusChangeHandler = (_ profileID: UUID, _ state: VPNConnectionState, _ disconnectError: Error?) -> Void
 
+    private static let errorDomain = "maco.VPN"
     private let statusChangeHandler: StatusChangeHandler?
     private var managersByProfileID: [UUID: NETunnelProviderManager] = [:]
     private var statesByProfileID: [UUID: VPNConnectionState] = [:]
@@ -29,7 +30,7 @@ final class SystemVPNConnectionStore {
             guard let managers else {
                 DispatchQueue.main.async {
                     completion(.failure(NSError(
-                        domain: "maco.VPN",
+                        domain: Self.errorDomain,
                         code: 1,
                         userInfo: [NSLocalizedDescriptionKey: "Could not load VPN configurations."]
                     )))
@@ -94,7 +95,7 @@ final class SystemVPNConnectionStore {
             case .success:
                 guard let manager = self.managersByProfileID[profileID] else {
                     completion(.failure(NSError(
-                        domain: "maco.VPN",
+                        domain: Self.errorDomain,
                         code: 3,
                         userInfo: [NSLocalizedDescriptionKey: "No VPN configuration exists for this profile."]
                     )))

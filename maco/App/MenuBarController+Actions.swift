@@ -21,8 +21,7 @@ extension MenuBarController {
         }
 
         do {
-            let contents = try profileImporter.contents(from: sourceURL)
-            let analysis = try profileImporter.analyze(contents: contents, sourceFileName: sourceURL.lastPathComponent)
+            let analysis = try profileImporter.analyze(fileURL: sourceURL)
             let profileName = analysis.displayName
 
             if !analysis.warnings.isEmpty {
@@ -48,20 +47,15 @@ extension MenuBarController {
                         try self.credentialStore.saveCredentials(credentials, for: profileID)
                         self.notifier.notifyCredentialsSaved(profileName: profileName)
                     } catch {
-                        self.notifier.notifyFailure(title: "Credentials Not Saved", message: error.localizedDescription)
-                        self.presentAlert(title: "Credentials Not Saved", message: error.localizedDescription)
+                        self.notifyAndAlert(title: "Credentials Not Saved", message: error.localizedDescription)
                     }
                     self.synchronizeVPNStates()
                 case .failure(let error):
-                    let detail = self.detailedError(error)
-                    self.notifier.notifyFailure(title: "Import Failed", message: detail)
-                    self.presentAlert(title: "Import Failed", message: detail)
+                    self.notifyAndAlert(title: "Import Failed", message: self.detailedError(error))
                 }
             }
         } catch {
-            let detail = detailedError(error)
-            notifier.notifyFailure(title: "Import Failed", message: detail)
-            presentAlert(title: "Import Failed", message: detail)
+            notifyAndAlert(title: "Import Failed", message: detailedError(error))
         }
     }
 
@@ -88,8 +82,7 @@ extension MenuBarController {
             notifier.notifyCredentialsSaved(profileName: context.displayName)
             refreshMenu()
         } catch {
-            notifier.notifyFailure(title: "Credentials Not Saved", message: error.localizedDescription)
-            presentAlert(title: "Credentials Not Saved", message: error.localizedDescription)
+            notifyAndAlert(title: "Credentials Not Saved", message: error.localizedDescription)
         }
     }
 
@@ -108,8 +101,7 @@ extension MenuBarController {
             notifier.notifyCredentialsCleared(profileName: context.displayName)
             refreshMenu()
         } catch {
-            notifier.notifyFailure(title: "Could Not Clear Credentials", message: error.localizedDescription)
-            presentAlert(title: "Could Not Clear Credentials", message: error.localizedDescription)
+            notifyAndAlert(title: "Could Not Clear Credentials", message: error.localizedDescription)
         }
     }
 

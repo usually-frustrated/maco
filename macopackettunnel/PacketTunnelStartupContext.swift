@@ -47,24 +47,12 @@ struct PacketTunnelStartupContext {
     }
 
     private static func requiresSavedCredentials(in profileConfigData: Data) -> Bool {
-        let encodings: [String.Encoding] = [.utf8, .ascii, .isoLatin1, .windowsCP1252]
-        guard let contents = encodings.compactMap({ String(data: profileConfigData, encoding: $0) }).first else {
-            return false
+        // profileConfigData is always derived from configContent.data(using: .utf8)
+        guard let contents = String(data: profileConfigData, encoding: .utf8) else { return false }
+        return contents.split(separator: "\n", omittingEmptySubsequences: false).contains { rawLine in
+            let line = rawLine.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !line.isEmpty, !line.hasPrefix("#"), !line.hasPrefix(";") else { return false }
+            return line.split(whereSeparator: { $0.isWhitespace }).first?.lowercased() == "auth-user-pass"
         }
-
-        return contents
-            .split(separator: "\n", omittingEmptySubsequences: false)
-            .contains { rawLine in
-                let line = rawLine.trimmingCharacters(in: .whitespacesAndNewlines)
-                guard !line.isEmpty, !line.hasPrefix("#"), !line.hasPrefix(";") else {
-                    return false
-                }
-
-                guard let directive = line.split(whereSeparator: { $0.isWhitespace }).first else {
-                    return false
-                }
-
-                return directive.lowercased() == "auth-user-pass"
-            }
     }
 }

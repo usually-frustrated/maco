@@ -1,26 +1,22 @@
 import AppKit
 
 extension MenuBarController {
-    func makeMenu(using listing: ProfileListState) -> NSMenu {
+    func makeMenu(using profiles: [SystemVPNConnectionStore.VPNProfileInfo]) -> NSMenu {
         let menu = NSMenu()
-        let status = status(for: listing)
 
-        menu.addItem(disabledItem(title: status.title))
+        menu.addItem(disabledItem(title: status(for: profiles).title))
         menu.addItem(.separator())
         menu.addItem(actionItem(title: "Import .ovpn...", action: #selector(importProfile)))
         menu.addItem(actionItem(title: "Open VPN Settings...", action: #selector(openVPNSettings)))
         menu.addItem(.separator())
         menu.addItem(disabledItem(title: "Profiles"))
 
-        switch listing {
-        case .loaded(let profiles) where profiles.isEmpty:
+        if profiles.isEmpty {
             menu.addItem(disabledItem(title: "No imported profiles yet"))
-        case .loaded(let profiles):
+        } else {
             for profile in profiles {
                 menu.addItem(profileMenuItem(for: profile))
             }
-        case .failed(let message):
-            menu.addItem(disabledItem(title: message))
         }
 
         menu.addItem(.separator())
@@ -32,6 +28,11 @@ extension MenuBarController {
         let item = NSMenuItem(title: profile.displayName, action: nil, keyEquivalent: "")
         let submenu = NSMenu(title: profile.displayName)
         let credentialState = loadCredentialState(for: profile.id)
+        let context = ProfileActionContext(
+            id: profile.id,
+            displayName: profile.displayName,
+            savedUsername: credentialState.savedUsername
+        )
 
         submenu.addItem(disabledItem(title: "Status: \(vpnState(for: profile.id).label)"))
         submenu.addItem(.separator())
@@ -40,20 +41,12 @@ extension MenuBarController {
             title: credentialState.isSaved ? "Replace Credentials..." : "Set Credentials...",
             action: #selector(editCredentials(_:))
         )
-        credentialItem.representedObject = ProfileActionContext(
-            id: profile.id,
-            displayName: profile.displayName,
-            savedUsername: credentialState.savedUsername
-        )
+        credentialItem.representedObject = context
         submenu.addItem(credentialItem)
 
         if credentialState.isSaved {
             let clearItem = actionItem(title: "Clear Credentials...", action: #selector(clearCredentials(_:)))
-            clearItem.representedObject = ProfileActionContext(
-                id: profile.id,
-                displayName: profile.displayName,
-                savedUsername: credentialState.savedUsername
-            )
+            clearItem.representedObject = context
             submenu.addItem(clearItem)
         }
 
@@ -64,11 +57,7 @@ extension MenuBarController {
             action: #selector(toggleProfileConnection(_:))
         )
         connectionItem.isEnabled = vpnState(for: profile.id).actionEnabled
-        connectionItem.representedObject = ProfileActionContext(
-            id: profile.id,
-            displayName: profile.displayName,
-            savedUsername: credentialState.savedUsername
-        )
+        connectionItem.representedObject = context
         submenu.addItem(connectionItem)
 
         item.submenu = submenu

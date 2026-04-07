@@ -17,16 +17,10 @@ extension MenuBarController {
         vpnStatesByProfileID[profileID] ?? .disconnected
     }
 
-    func cacheProfiles(from listing: ProfileListState) {
-        switch listing {
-        case .loaded(let profiles):
-            profileNamesByID = Dictionary(uniqueKeysWithValues: profiles.map { ($0.id, $0.displayName) })
-            vpnStatesByProfileID = profiles.reduce(into: [:]) { result, profile in
-                result[profile.id] = vpnConnectionStore.connectionState(for: profile.id) ?? .disconnected
-            }
-        case .failed:
-            profileNamesByID.removeAll()
-            vpnStatesByProfileID.removeAll()
+    func cacheProfiles(from profiles: [SystemVPNConnectionStore.VPNProfileInfo]) {
+        profileNamesByID = Dictionary(uniqueKeysWithValues: profiles.map { ($0.id, $0.displayName) })
+        vpnStatesByProfileID = profiles.reduce(into: [:]) { result, profile in
+            result[profile.id] = vpnConnectionStore.connectionState(for: profile.id) ?? .disconnected
         }
     }
 
@@ -105,6 +99,11 @@ extension MenuBarController {
         alert.addButton(withTitle: "Clear")
         alert.addButton(withTitle: "Cancel")
         return alert.runModal() == .alertFirstButtonReturn
+    }
+
+    func notifyAndAlert(title: String, message: String) {
+        notifier.notifyFailure(title: title, message: message)
+        presentAlert(title: title, message: message)
     }
 
     func presentAlert(title: String, message: String) {

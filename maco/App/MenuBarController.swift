@@ -3,11 +3,6 @@ import Foundation
 import os
 
 final class MenuBarController: NSObject {
-    enum ProfileListState {
-        case loaded([SystemVPNConnectionStore.VPNProfileInfo])
-        case failed(String)
-    }
-
     enum CredentialState {
         case unavailable
         case missing
@@ -46,43 +41,28 @@ final class MenuBarController: NSObject {
     }
 
     func configureStatusItem() {
-        if let button = statusItem.button {
-            button.image = nil
-            button.imagePosition = .noImage
-            button.title = Self.menuBarTitle
-        } else {
+        if statusItem.button == nil {
             logger.error("Status item button unavailable")
         }
-
         refreshMenu()
         synchronizeVPNStates()
     }
 
     func refreshMenu() {
-        let listing = loadProfiles()
-        cacheProfiles(from: listing)
-        updateStatusItem(using: status(for: listing))
-        statusItem.menu = makeMenu(using: listing)
+        let profiles = vpnConnectionStore.loadedProfileInfos()
+        cacheProfiles(from: profiles)
+        let menuStatus = status(for: profiles)
+        updateStatusItem(using: menuStatus)
+        statusItem.menu = makeMenu(using: profiles)
     }
 
-    func loadProfiles() -> ProfileListState {
-        .loaded(vpnConnectionStore.loadedProfileInfos())
-    }
-
-    func status(for listing: ProfileListState) -> MenuBarStatus {
-        switch listing {
-        case .loaded(let profiles):
-            let activeStates = profiles.map { vpnState(for: $0.id) }
-            let connectedCount = activeStates.filter { $0.isConnected }.count
-            let busyCount = activeStates.filter { $0.isBusy }.count
-            return .status(
-                profileCount: profiles.count,
-                connectedCount: connectedCount,
-                busyCount: busyCount
-            )
-        case .failed:
-            return .storageUnavailable
-        }
+    func status(for profiles: [SystemVPNConnectionStore.VPNProfileInfo]) -> MenuBarStatus {
+        let activeStates = profiles.map { vpnState(for: $0.id) }
+        return .status(
+            profileCount: profiles.count,
+            connectedCount: activeStates.filter { $0.isConnected }.count,
+            busyCount: activeStates.filter { $0.isBusy }.count
+        )
     }
 
     func updateStatusItem(using status: MenuBarStatus) {
