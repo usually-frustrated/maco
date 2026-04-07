@@ -71,7 +71,6 @@ final class MenuBarController: NSObject {
         button.title = ""
         let imageName = isPromptingForOTP ? "MenuBarIconWaitingForOTP" : status.imageName
         if let image = NSImage(named: imageName)?.copy() as? NSImage {
-            image.isTemplate = true
             image.size = NSSize(width: 18, height: 18)
             button.image = image
             button.imagePosition = .imageOnly
