@@ -12,3 +12,8 @@ DerivedData/
 # SwiftPM resolution artifacts when this repo adds packages later
 .swiftpm/
 Package.resolved
+
+# Aider session scratch files
+.aider.chat.history.md
+.aider.input.history
+.aider.tags.cache.v4/

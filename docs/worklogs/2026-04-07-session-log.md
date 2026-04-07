@@ -41,10 +41,11 @@ button title at font size 16.
 
 ### 7. App icon
 - Identified that `INFOPLIST_KEY_CFBundleIconFile = AppIcon` didn't match the
-  bundled file (`AppIcon 2.icns`).
-- Fixed: changed the key to `"AppIcon 2"` in project.pbxproj (both Debug and
-  Release configs). Maco's icon now appears correctly in System Settings > VPN and
-  Dock/Finder. Alerts use `NSApp.applicationIconImage`.
+  bundled file (`AppIcon.icns`).
+- Fixed: changed the key to `AppIcon` in project.pbxproj (both Debug and
+  Release configs) and copied the icon into the extension bundle. Maco's icon
+  now appears correctly in System Settings > VPN and Dock/Finder. Alerts use
+  `NSApp.applicationIconImage`.
 
 ### 8. Static linking — fixed extension dyld crash
 Root cause: `macopackettunnel.appex` was dynamically linked against six zerobrew

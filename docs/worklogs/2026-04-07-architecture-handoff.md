@@ -252,7 +252,7 @@ not from `ProfileStore`. Profile IDs are stable (stored in providerConfiguration
 - `maco/Profiles/ProfileStore.swift`
 - `maco/Profiles/ProfileRecord.swift`
 - `maco/Profiles/ProfilePaths.swift`
-- `maco/Resources/AppIcon 2.icns` (duplicate; `AppIcon.icns` is the canonical resource now)
+- `maco/Resources/AppIcon.icns` is the canonical resource now
 
 Keep (still used):
 - `maco/Profiles/ProfileImporter.swift` — used at import time to parse display name
