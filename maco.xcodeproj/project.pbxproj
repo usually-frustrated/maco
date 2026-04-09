@@ -13,8 +13,6 @@
 		A00000010000000000000004 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000007 /* AppKit.framework */; };
 		A00000010000000000000005 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000008 /* NetworkExtension.framework */; };
 		A00000010000000000000006 /* macopackettunnel.systemextension in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = A00000110000000000000010 /* macopackettunnel.systemextension */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A00000010000000000000036 /* SystemExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000042 /* SystemExtensions.framework */; };
-		A00000010000000000000037 /* SystemExtensionActivator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000043 /* SystemExtensionActivator.swift */; };
 		A00000010000000000000007 /* ProfileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000011 /* ProfileImporter.swift */; };
 		A00000010000000000000011 /* AppNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000015 /* AppNotificationCenter.swift */; };
 		A00000010000000000000012 /* MenuBarStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000016 /* MenuBarStatus.swift */; };
@@ -41,6 +39,9 @@
 		A00000010000000000000033 /* MenuBarController+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000039 /* MenuBarController+State.swift */; };
 		A00000010000000000000034 /* ProfileActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000040 /* ProfileActionContext.swift */; };
 		A00000010000000000000035 /* MenuBarController+Connections.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000041 /* MenuBarController+Connections.swift */; };
+		A00000010000000000000036 /* SystemExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00000110000000000000042 /* SystemExtensions.framework */; };
+		A00000010000000000000037 /* SystemExtensionActivator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000043 /* SystemExtensionActivator.swift */; };
+		A00000010000000000000038 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000044 /* main.swift */; };
 		DF2787682F84F2BF00EDBFF2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF2787672F84F2BF00EDBFF2 /* Assets.xcassets */; };
 		DF2787762F85168100EDBFF2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF2787672F84F2BF00EDBFF2 /* Assets.xcassets */; };
 		DFC4935E2F83719100DC9DF0 /* ProfileCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000110000000000000019 /* ProfileCredentials.swift */; };
@@ -84,8 +85,6 @@
 		A00000110000000000000008 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		A00000110000000000000009 /* maco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = maco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000110000000000000010 /* macopackettunnel.systemextension */ = {isa = PBXFileReference; explicitFileType = "wrapper.system-extension"; includeInIndex = 0; path = macopackettunnel.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
-		A00000110000000000000042 /* SystemExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemExtensions.framework; path = System/Library/Frameworks/SystemExtensions.framework; sourceTree = SDKROOT; };
-		A00000110000000000000043 /* SystemExtensionActivator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemExtensionActivator.swift; sourceTree = "<group>"; };
 		A00000110000000000000011 /* ProfileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImporter.swift; sourceTree = "<group>"; };
 		A00000110000000000000015 /* AppNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotificationCenter.swift; sourceTree = "<group>"; };
 		A00000110000000000000016 /* MenuBarStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarStatus.swift; sourceTree = "<group>"; };
@@ -114,6 +113,9 @@
 		A00000110000000000000039 /* MenuBarController+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuBarController+State.swift"; sourceTree = "<group>"; };
 		A00000110000000000000040 /* ProfileActionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionContext.swift; sourceTree = "<group>"; };
 		A00000110000000000000041 /* MenuBarController+Connections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuBarController+Connections.swift"; sourceTree = "<group>"; };
+		A00000110000000000000042 /* SystemExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemExtensions.framework; path = System/Library/Frameworks/SystemExtensions.framework; sourceTree = SDKROOT; };
+		A00000110000000000000043 /* SystemExtensionActivator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemExtensionActivator.swift; sourceTree = "<group>"; };
+		A00000110000000000000044 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		DF2787672F84F2BF00EDBFF2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -198,6 +200,7 @@
 		A00000050000000000000005 /* macopackettunnel */ = {
 			isa = PBXGroup;
 			children = (
+				A00000110000000000000044 /* main.swift */,
 				A00000110000000000000005 /* PacketTunnelProvider.swift */,
 				A00000110000000000000026 /* PacketTunnelStartupError.swift */,
 				A00000110000000000000027 /* PacketTunnelStartupContext.swift */,
@@ -290,7 +293,7 @@
 				A00000060000000000000001 /* Sources */,
 				A00000040000000000000001 /* Frameworks */,
 				A00000080000000000000001 /* Resources */,
-				A00000030000000000000001 /* Embed Foundation Extensions */,
+				A00000030000000000000001 /* Embed System Extensions */,
 			);
 			buildRules = (
 			);
@@ -375,9 +378,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		A00000060000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -410,6 +410,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A00000010000000000000038 /* main.swift in Sources */,
 				A00000010000000000000003 /* PacketTunnelProvider.swift in Sources */,
 				A00000010000000000000022 /* PacketTunnelStartupError.swift in Sources */,
 				A00000010000000000000023 /* PacketTunnelStartupContext.swift in Sources */,
