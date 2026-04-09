@@ -522,12 +522,13 @@ class PacketFlowTunClient final : public TunClient {
                 return;
             }
 
-            for (NSData *packet in packets) {
-                const auto *bytes = static_cast<const unsigned char *>(packet.bytes);
-                BufferAllocated buf(bytes, packet.length, 0);
-                openvpn_io::post(ioContext_, [client, packet = std::move(buf)]() mutable {
+            for (NSData *nsPacket in packets) {
+                const auto *bytes = static_cast<const unsigned char *>(nsPacket.bytes);
+                const auto packetSize = static_cast<size_t>(nsPacket.length);
+                BufferAllocated packetBuffer(bytes, packetSize, BufAllocFlags::NO_FLAGS);
+                openvpn_io::post(ioContext_, [client, packetBuffer = std::move(packetBuffer)]() mutable {
                     if (!client->stopped_) {
-                        client->parent_.tun_recv(packet);
+                        client->parent_.tun_recv(packetBuffer);
                     }
                 });
             }

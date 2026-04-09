@@ -140,6 +140,7 @@ Key files:
 - The repo is in the post-refactor Phase 7 state: embedded provider config, menu-state updates, tunnel startup flow, and icon wiring are all in place.
 - The project has been renamed to `maco`, and the packet tunnel source tree now lives under `macopackettunnel/`.
 - The current build passes with `xcodebuild -project maco.xcodeproj -scheme maco -configuration Debug build`.
+- The Release build now also passes after fixing the packet tunnel packet-copy path from `NSData` into `BufferAllocated`.
 - The connection flow now shows `Connecting` immediately in the menu, and the tunnel startup path no longer hits the earlier settings timeout in the latest repro.
 - VPN Settings now shows the app icon from the extension bundle as well as the app bundle.
 - Release signing has been moved to automatic distribution-oriented settings for archive-ready builds, but App Store upload still needs to be finished through Xcode Organizer with the developer account and provisioning profiles that match the Network Extension capability.
@@ -147,6 +148,7 @@ Key files:
 - The menu bar now uses the Unicode glyph `⦼` with light padding instead of an image icon.
 - `MenuBarController.swift` has been split into smaller extension files to keep individual files near the repo's size target.
 - The app and packet-tunnel extension now share matching build numbers, which clears Xcode's embedded-binary validation warning.
+- The packet tunnel bridge now compiles in Release, and the archive path is clear of the earlier undefined-symbol / bridge-compile failure.
 
 ## Not Implemented Yet
 
@@ -168,6 +170,7 @@ Key files:
 - Local `xcodebuild` verification after Phase 7 bridge wiring with `-derivedDataPath /tmp/macovpn-derived CODE_SIGNING_ALLOWED=NO`
 - Local `xcodebuild` verification after the `maco` rename with `-derivedDataPath /tmp/maco-derived CODE_SIGNING_ALLOWED=NO`
 - Local `xcodebuild` verification after the embedded-config and connection-status follow-up with default signing enabled
+- Local `xcodebuild` verification for `Release` with `-derivedDataPath /tmp/maco-release-derived build`
 - Fresh connection repro after clearing stale diagnostic logs completed without the previous `NEVPNConnectionErrorDomain 12` failure
 - Review passes that resulted in fixes for:
   - non-default profile-store root handling

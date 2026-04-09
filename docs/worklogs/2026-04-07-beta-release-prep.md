@@ -13,6 +13,7 @@ Get the project into a state where a beta build can be archived and uploaded thr
 - Switched icon loading to the `Assets.xcassets` `AppIcon` asset and removed the `.icns` dependency from the app and extension project wiring.
 - Replaced the menu bar image with the Unicode glyph `⦼` and removed the old image-based menu-bar icon helper.
 - Split the menu bar controller into smaller extension files so the controller stays under the file-size target and the responsibilities are easier to follow.
+- Fixed the packet-tunnel `NSData` to `BufferAllocated` handoff so the OpenVPN bridge now compiles in Release and archives past the previous packet-read failure.
 
 ## Verification
 
@@ -22,6 +23,7 @@ Get the project into a state where a beta build can be archived and uploaded thr
 - The menu bar controller now sets the status button title to `⦼` with padding instead of using an image.
 - `MenuBarController.swift` is now a coordinator file, with menu actions, menu construction, state handling, and action context split into dedicated files.
 - The app and packet-tunnel extension now share the same build number so Xcode's embedded-binary validation passes cleanly.
+- `xcodebuild -project maco.xcodeproj -scheme maco -configuration Release -derivedDataPath /tmp/maco-release-derived build` now succeeds after fixing the packet tunnel bridge packet-copy path.
 
 ## Blockers
 

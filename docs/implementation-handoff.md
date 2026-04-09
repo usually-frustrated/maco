@@ -28,6 +28,7 @@ Use this with:
   - passive VPN notifications for connecting, connected, disconnecting, disconnected, and failed states
 - The packet tunnel now resolves provider payload, config paths, and shared credentials, then hands off to a compiling Objective-C++ OpenVPN bridge.
 - The shared app-group container path is wired for profile storage and the packet tunnel startup path reads from that path in code, but signed runtime validation has not been proven in this environment yet.
+- The Release build now succeeds after fixing the packet tunnel packet-copy path from `NSData` into `BufferAllocated`.
 
 ## What The Code Does Not Do Yet
 
@@ -96,6 +97,7 @@ Reason:
 - The menu bar status item now renders the Unicode glyph `⦼` with a little padding instead of an image.
 - `MenuBarController.swift` is now a coordinator, with its menu, actions, state, and action-context code split into smaller files.
 - The app and packet tunnel build numbers now match, which keeps embedded binary validation clean during archive and build flows.
+- `xcodebuild -project maco.xcodeproj -scheme maco -configuration Release -derivedDataPath /tmp/maco-release-derived build` now succeeds.
 
 ## Handoff To Next Thread
 
@@ -103,3 +105,4 @@ Reason:
 - Keep Phase 7 scoped to one imported profile and one OpenVPN 3 Core connection path.
 - First prove the packet tunnel can launch signed and read the shared profile file path.
 - If that succeeds, finish the smallest possible real tunnel connection path and stop.
+- Archive and upload through Xcode Organizer are now the next release-distribution steps.
