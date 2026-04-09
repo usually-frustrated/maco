@@ -64,8 +64,8 @@
 		A00000030000000000000001 /* Embed System Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Library/SystemExtensions";
+			dstSubfolderSpec = 16;
 			files = (
 				A00000010000000000000006 /* frustrated.maco.app.packet-tunnel.systemextension in Embed System Extensions */,
 			);
