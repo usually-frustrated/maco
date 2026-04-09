@@ -80,7 +80,7 @@
 		A00000110000000000000006 /* macopackettunnel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macopackettunnel.entitlements; sourceTree = "<group>"; };
 		A00000110000000000000007 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A00000110000000000000008 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
-		A00000110000000000000009 /* maco..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = maco..app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00000110000000000000009 /* maco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = maco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000110000000000000010 /* macopackettunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = macopackettunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00000110000000000000011 /* ProfileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImporter.swift; sourceTree = "<group>"; };
 		A00000110000000000000015 /* AppNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotificationCenter.swift; sourceTree = "<group>"; };
@@ -227,7 +227,7 @@
 		A00000050000000000000009 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A00000110000000000000009 /* maco..app */,
+				A00000110000000000000009 /* maco.app */,
 				A00000110000000000000010 /* macopackettunnel.appex */,
 			);
 			name = Products;
@@ -292,7 +292,7 @@
 			);
 			name = maco;
 			productName = maco;
-			productReference = A00000110000000000000009 /* maco..app */;
+			productReference = A00000110000000000000009 /* maco.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A00000100000000000000003 /* macopackettunnel */ = {
@@ -551,7 +551,7 @@
 				);
 				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = frustrated.maco.app;
-				PRODUCT_NAME = maco.;
+				PRODUCT_NAME = maco;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -579,7 +579,7 @@
 				);
 				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = frustrated.maco.app;
-				PRODUCT_NAME = maco.;
+				PRODUCT_NAME = maco;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
