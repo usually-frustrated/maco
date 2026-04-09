@@ -7,8 +7,9 @@
 
 `maco` is a small native macOS OpenVPN client that lives in the menu bar.
 
-</div>
+<img src="docs/maco.png" width="400px" /> 
 
+</div>
 
 ## What It Does
 

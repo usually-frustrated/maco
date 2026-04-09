@@ -17,7 +17,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A00000100000000000000003"
-               BuildableName = "macopackettunnel.appex"
+               BuildableName = "frustrated.maco.app.packet-tunnel.systemextension"
                BlueprintName = "macopackettunnel"
                ReferencedContainer = "container:maco.xcodeproj">
             </BuildableReference>
