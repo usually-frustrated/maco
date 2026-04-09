@@ -610,15 +610,8 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
-					HEADER_SEARCH_PATHS = (
-						"/tmp/openvpn3",
-						/opt/zerobrew/opt/asio/include,
-						"/opt/zerobrew/opt/openssl@3/include",
-						/opt/zerobrew/opt/fmt/include,
-						/opt/zerobrew/opt/jsoncpp/include,
-						/opt/zerobrew/opt/lz4/include,
-						/opt/zerobrew/opt/xxhash/include,
-					);
+				EXCLUDED_ARCHS = x86_64;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = macopackettunnel/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -635,30 +628,26 @@
 					"-DHAVE_JSONCPP",
 					"-DOPENVPN_EXTERNAL_TUN_FACTORY",
 				);
-					OTHER_LDFLAGS = (
-						"$(inherited)",
-						"/opt/zerobrew/Cellar/openssl@3/3.6.1/lib/libssl.a",
-						"/opt/zerobrew/Cellar/openssl@3/3.6.1/lib/libcrypto.a",
-						"/opt/zerobrew/opt/fmt/lib/libfmt.a",
-						"/opt/zerobrew/opt/jsoncpp/lib/libjsoncpp.a",
-						"/opt/zerobrew/opt/lz4/lib/liblz4.a",
-						"/opt/zerobrew/opt/xxhash/lib/libxxhash.a",
-					);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"$(SRCROOT)/deps/built/lib/libssl.a",
+					"$(SRCROOT)/deps/built/lib/libcrypto.a",
+					"$(SRCROOT)/deps/built/lib/libfmt.a",
+					"$(SRCROOT)/deps/built/lib/libjsoncpp.a",
+					"$(SRCROOT)/deps/built/lib/liblz4.a",
+					"$(SRCROOT)/deps/built/lib/libxxhash.a",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "frustrated.maco.app.packet-tunnel";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "macopackettunnel/Resources/macopackettunnel-Bridging-Header.h";
-					"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = (
-						"/tmp/openvpn3",
-						/opt/zerobrew/opt/asio/include,
-						"/opt/zerobrew/opt/openssl@3/include",
-						/opt/zerobrew/opt/fmt/include,
-						/opt/zerobrew/opt/jsoncpp/include,
-						/opt/zerobrew/opt/lz4/include,
-						/opt/zerobrew/opt/xxhash/include,
-					);
+				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = (
+					"$(SRCROOT)/deps/openvpn3",
+					"$(SRCROOT)/deps/asio/asio/include",
+					"$(SRCROOT)/deps/built/include",
+				);
 			};
 			name = Debug;
 		};
@@ -686,15 +675,8 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
-					HEADER_SEARCH_PATHS = (
-						"/tmp/openvpn3",
-						/opt/zerobrew/opt/asio/include,
-						"/opt/zerobrew/opt/openssl@3/include",
-						/opt/zerobrew/opt/fmt/include,
-						/opt/zerobrew/opt/jsoncpp/include,
-						/opt/zerobrew/opt/lz4/include,
-						/opt/zerobrew/opt/xxhash/include,
-					);
+				EXCLUDED_ARCHS = x86_64;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = macopackettunnel/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -711,30 +693,26 @@
 					"-DHAVE_JSONCPP",
 					"-DOPENVPN_EXTERNAL_TUN_FACTORY",
 				);
-					OTHER_LDFLAGS = (
-						"$(inherited)",
-						"/opt/zerobrew/Cellar/openssl@3/3.6.1/lib/libssl.a",
-						"/opt/zerobrew/Cellar/openssl@3/3.6.1/lib/libcrypto.a",
-						"/opt/zerobrew/opt/fmt/lib/libfmt.a",
-						"/opt/zerobrew/opt/jsoncpp/lib/libjsoncpp.a",
-						"/opt/zerobrew/opt/lz4/lib/liblz4.a",
-						"/opt/zerobrew/opt/xxhash/lib/libxxhash.a",
-					);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"$(SRCROOT)/deps/built/lib/libssl.a",
+					"$(SRCROOT)/deps/built/lib/libcrypto.a",
+					"$(SRCROOT)/deps/built/lib/libfmt.a",
+					"$(SRCROOT)/deps/built/lib/libjsoncpp.a",
+					"$(SRCROOT)/deps/built/lib/liblz4.a",
+					"$(SRCROOT)/deps/built/lib/libxxhash.a",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "frustrated.maco.app.packet-tunnel";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "macopackettunnel/Resources/macopackettunnel-Bridging-Header.h";
-					"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = (
-						"/tmp/openvpn3",
-						/opt/zerobrew/opt/asio/include,
-						"/opt/zerobrew/opt/openssl@3/include",
-						/opt/zerobrew/opt/fmt/include,
-						/opt/zerobrew/opt/jsoncpp/include,
-						/opt/zerobrew/opt/lz4/include,
-						/opt/zerobrew/opt/xxhash/include,
-					);
+				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = (
+					"$(SRCROOT)/deps/built/include",
+					"$(SRCROOT)/deps/asio/asio/include",
+					"$(SRCROOT)/deps/openvpn3",
+				);
 			};
 			name = Release;
 		};

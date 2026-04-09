@@ -525,7 +525,7 @@ class PacketFlowTunClient final : public TunClient {
             for (NSData *nsPacket in packets) {
                 const auto *bytes = static_cast<const unsigned char *>(nsPacket.bytes);
                 const auto packetSize = static_cast<size_t>(nsPacket.length);
-                BufferAllocated packetBuffer(bytes, packetSize, BufAllocFlags::NO_FLAGS);
+                BufferAllocated packetBuffer(bytes, packetSize, 0);
                 openvpn_io::post(ioContext_, [client, packetBuffer = std::move(packetBuffer)]() mutable {
                     if (!client->stopped_) {
                         client->parent_.tun_recv(packetBuffer);
