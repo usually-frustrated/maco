@@ -20,4 +20,4 @@ Package.resolved
 deps/built/
 
 # Distribution artifacts — only DMGs are tracked, not app bundles
-dist/*.app
+dist/
