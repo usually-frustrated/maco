@@ -13,9 +13,10 @@ enum SystemVPNConfigurationStoreError: Error, LocalizedError {
 }
 
 final class SystemVPNConfigurationStore {
+    private static let errorDomain = "maco.VPN"
     private let providerBundleIdentifier: String
 
-    init(providerBundleIdentifier: String = "frustrated.maco.app.packet-tunnel") {
+    init(providerBundleIdentifier: String = "frustrated.maco.app.macopackettunnel") {
         self.providerBundleIdentifier = providerBundleIdentifier
     }
 
@@ -26,7 +27,7 @@ final class SystemVPNConfigurationStore {
     ) {
         let profileID = UUID()
         let manager = makeManager(profileID: profileID, displayName: displayName, configContent: configContent)
-        save(manager: manager) { result in
+        save(manager: manager, profileID: profileID) { result in
             completion(result.map { profileID })
         }
     }
@@ -69,6 +70,7 @@ final class SystemVPNConfigurationStore {
 
     private func save(
         manager: NETunnelProviderManager,
+        profileID: UUID,
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         manager.saveToPreferences { error in
@@ -76,6 +78,55 @@ final class SystemVPNConfigurationStore {
                 DispatchQueue.main.async { completion(.failure(error)) }
                 return
             }
+
+            self.waitForSavedManager(profileID: profileID, attemptsRemaining: 5, completion: completion)
+        }
+    }
+
+    private func waitForSavedManager(
+        profileID: UUID,
+        attemptsRemaining: Int,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        NETunnelProviderManager.loadAllFromPreferences { managers, error in
+            if let error {
+                DispatchQueue.main.async { completion(.failure(error)) }
+                return
+            }
+
+            guard let managers else {
+                DispatchQueue.main.async {
+                    completion(.failure(SystemVPNConfigurationStoreError.failedToLoadPreferences))
+                }
+                return
+            }
+
+            let saved = self.managedManagers(from: managers).contains {
+                self.payload(for: $0)?.profileID == profileID
+            }
+
+            guard saved else {
+                guard attemptsRemaining > 0 else {
+                    DispatchQueue.main.async {
+                        completion(.failure(NSError(
+                            domain: Self.errorDomain,
+                            code: 4,
+                            userInfo: [NSLocalizedDescriptionKey: "The VPN configuration was saved, but macOS did not expose it back through preferences."]
+                        )))
+                    }
+                    return
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.waitForSavedManager(
+                        profileID: profileID,
+                        attemptsRemaining: attemptsRemaining - 1,
+                        completion: completion
+                    )
+                }
+                return
+            }
+
             DispatchQueue.main.async { completion(.success(())) }
         }
     }
@@ -94,6 +145,18 @@ final class SystemVPNConfigurationStore {
         manager.protocolConfiguration = protocolConfiguration
         manager.isEnabled = true
         return manager
+    }
+
+    private func managedManagers(from managers: [NETunnelProviderManager]) -> [NETunnelProviderManager] {
+        managers.compactMap { manager in
+            guard let protocolConfiguration = manager.protocolConfiguration as? NETunnelProviderProtocol,
+                  let providerConfiguration = protocolConfiguration.providerConfiguration,
+                  providerConfiguration[VPNProviderPayload.managedByAppKey] as? Bool == true
+            else {
+                return nil
+            }
+            return manager
+        }
     }
 
     private func payload(for manager: NETunnelProviderManager) -> VPNProviderPayload? {

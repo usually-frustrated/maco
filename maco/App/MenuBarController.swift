@@ -33,10 +33,12 @@ final class MenuBarController: NSObject {
     var disconnectingProfileIDs: Set<UUID> = []
     var isPromptingForOTP = false
     let logger = Logger(subsystem: "frustrated.maco.app", category: "menu-bar")
+    var logViewerWindowController: LogViewerWindowController?
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         super.init()
+        logger.info("maco starting up")
         configureStatusItem()
     }
 

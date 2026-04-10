@@ -9,7 +9,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         AppIcon.installAsApplicationIcon()
         installEditMenu()
         AppNotificationCenter.shared.prepare()
-        SystemExtensionActivator.shared.activate()
         menuBarController = MenuBarController()
     }
 

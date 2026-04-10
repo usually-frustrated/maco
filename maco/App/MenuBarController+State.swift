@@ -25,9 +25,11 @@ extension MenuBarController {
     }
 
     func synchronizeVPNStates() {
+        logger.debug("Synchronizing VPN states")
         vpnConnectionStore.synchronize { [weak self] result in
             guard let self else { return }
             if case .failure(let error) = result {
+                self.logger.error("VPN state sync failed: \(error.localizedDescription, privacy: .public)")
                 self.notifier.notifyFailure(
                     title: "VPN State Sync Failed",
                     message: error.localizedDescription
@@ -36,6 +38,7 @@ extension MenuBarController {
             }
 
             let loadedProfileInfos = self.vpnConnectionStore.loadedProfileInfos()
+            self.logger.info("Synced \(loadedProfileInfos.count) VPN profile(s)")
             self.cleanupOrphanedCredentials(validProfileIDs: Set(loadedProfileInfos.map(\.id)))
             self.refreshMenu()
         }
@@ -68,6 +71,8 @@ extension MenuBarController {
             return
         }
 
+        logger.info("VPN state changed for '\(profileName, privacy: .public)': \(String(describing: previousState), privacy: .public) → \(String(describing: state), privacy: .public)")
+
         switch state {
         case .connecting:
             notifier.notifyVPNConnecting(profileName: profileName)
@@ -78,6 +83,7 @@ extension MenuBarController {
         case .failed:
             let failureMessage = disconnectError.map { detailedError($0) }
                 ?? "The VPN disconnected unexpectedly. No additional details available."
+            logger.error("VPN failed for '\(profileName, privacy: .public)': \(failureMessage, privacy: .public)")
             notifier.notifyVPNFailed(profileName: profileName, message: failureMessage)
         case .disconnected:
             disconnectingProfileIDs.remove(profileID)

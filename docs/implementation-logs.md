@@ -17,3 +17,4 @@ Use the other docs for product intent, locked architecture, and phase definition
 - [2026-04-07: Embedded Manager Profile Config Refactor](./worklogs/2026-04-07-embedded-manager-profile-config.md)
 - [2026-04-07: Connection Status And Tunnel Startup Fix](./worklogs/2026-04-07-connection-status-timeout-fix.md)
 - [2026-04-07: Beta Release Prep](./worklogs/2026-04-07-beta-release-prep.md)
+- [2026-04-09: App Store Network Extension Permission Fix](./worklogs/2026-04-09-app-store-networkextension-permission-fix.md)

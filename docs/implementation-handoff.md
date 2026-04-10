@@ -90,6 +90,8 @@ Reason:
 
 - Xcode Release signing should stay on automatic management with the shared team selected; do not hard-code an Apple Distribution identity in build settings.
 - The app and packet tunnel targets both need the Network Extension, App Sandbox, App Groups, and Keychain Sharing capabilities aligned with their entitlements.
+- Both targets now explicitly declare `com.apple.developer.networking.networkextension` with `packet-tunnel-provider-systemextension`, which matches the current system-extension target model.
+- The app target now also explicitly declares `com.apple.developer.networking.vpn.api` for VPN preference management.
 - Use Xcode `Product > Archive`, then `Distribute App > App Store Connect > Upload` from Organizer for the beta build.
 - If provisioning fails, refresh signing assets in Xcode `Settings > Accounts` and confirm Apple has approved the Network Extension entitlement for both bundle IDs.
 - Increment the build number before each upload so TestFlight receives a unique archive.
@@ -105,4 +107,5 @@ Reason:
 - Keep Phase 7 scoped to one imported profile and one OpenVPN 3 Core connection path.
 - First prove the packet tunnel can launch signed and read the shared profile file path.
 - If that succeeds, finish the smallest possible real tunnel connection path and stop.
+- Re-test `.ovpn` import and first connect with the Network Extension entitlement present, and confirm the saved manager reappears in preferences before connect proceeds.
 - Archive and upload through Xcode Organizer are now the next release-distribution steps.

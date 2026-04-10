@@ -23,8 +23,10 @@ extension MenuBarController {
         do {
             let analysis = try profileImporter.analyze(fileURL: sourceURL)
             let profileName = analysis.displayName
+            logger.info("Importing profile '\(profileName, privacy: .public)' from \(sourceURL.lastPathComponent, privacy: .public)")
 
             if !analysis.warnings.isEmpty {
+                logger.warning("Profile '\(profileName, privacy: .public)' has \(analysis.warnings.count) warning(s)")
                 let warningText = analysis.warnings
                     .map { "Line \($0.line) [\($0.directive)]: \($0.message)" }
                     .joined(separator: "\n")
@@ -35,6 +37,7 @@ extension MenuBarController {
             }
 
             guard let credentials = credentialPrompt.prompt(profileName: profileName) else {
+                logger.info("Profile import cancelled at credentials prompt for '\(profileName, privacy: .public)'")
                 return
             }
 
@@ -42,19 +45,23 @@ extension MenuBarController {
                 guard let self else { return }
                 switch result {
                 case .success(let profileID):
+                    self.logger.info("Profile '\(profileName, privacy: .public)' imported successfully (id: \(profileID, privacy: .public))")
                     self.notifier.notifyImportSuccess(profileName: profileName, warningCount: analysis.warnings.count)
                     do {
                         try self.credentialStore.saveCredentials(credentials, for: profileID)
                         self.notifier.notifyCredentialsSaved(profileName: profileName)
                     } catch {
+                        self.logger.error("Failed to save credentials for '\(profileName, privacy: .public)': \(error.localizedDescription, privacy: .public)")
                         self.notifyAndAlert(title: "Credentials Not Saved", message: error.localizedDescription)
                     }
                     self.synchronizeVPNStates()
                 case .failure(let error):
+                    self.logger.error("Profile import failed for '\(profileName, privacy: .public)': \(self.detailedError(error), privacy: .public)")
                     self.notifyAndAlert(title: "Import Failed", message: self.detailedError(error))
                 }
             }
         } catch {
+            logger.error("Profile analysis failed for \(sourceURL.lastPathComponent, privacy: .public): \(self.detailedError(error), privacy: .public)")
             notifyAndAlert(title: "Import Failed", message: detailedError(error))
         }
     }
@@ -79,9 +86,11 @@ extension MenuBarController {
 
         do {
             try credentialStore.saveCredentials(credentials, for: context.id)
+            logger.info("Credentials updated for profile '\(context.displayName, privacy: .public)'")
             notifier.notifyCredentialsSaved(profileName: context.displayName)
             refreshMenu()
         } catch {
+            logger.error("Failed to save credentials for '\(context.displayName, privacy: .public)': \(error.localizedDescription, privacy: .public)")
             notifyAndAlert(title: "Credentials Not Saved", message: error.localizedDescription)
         }
     }
@@ -98,24 +107,22 @@ extension MenuBarController {
 
         do {
             try credentialStore.removeCredentials(for: context.id)
+            logger.info("Credentials cleared for profile '\(context.displayName, privacy: .public)'")
             notifier.notifyCredentialsCleared(profileName: context.displayName)
             refreshMenu()
         } catch {
+            logger.error("Failed to clear credentials for '\(context.displayName, privacy: .public)': \(error.localizedDescription, privacy: .public)")
             notifyAndAlert(title: "Could Not Clear Credentials", message: error.localizedDescription)
         }
     }
 
     @objc
     func showLogs() {
-        // Opens Terminal running `log stream` filtered to this app's os_log subsystem.
-        // Shows live logs from the current session for both the app and the tunnel extension.
-        let script = #"""
-        tell application "Terminal"
-            activate
-            do script "log stream --predicate 'subsystem BEGINSWITH \"frustrated.maco.app\"' --level debug"
-        end tell
-        """#
-        NSAppleScript(source: script)?.executeAndReturnError(nil)
+        if logViewerWindowController == nil {
+            logViewerWindowController = LogViewerWindowController()
+        }
+        NSApp.activate(ignoringOtherApps: true)
+        logViewerWindowController?.showWindow(nil)
     }
 
     @objc

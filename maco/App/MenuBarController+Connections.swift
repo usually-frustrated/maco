@@ -25,10 +25,12 @@ extension MenuBarController {
         isPromptingForOTP = false
 
         guard let otp else {
+            logger.info("Connect cancelled by user for profile '\(context.displayName, privacy: .public)'")
             refreshMenu()
             return
         }
 
+        logger.info("Connecting profile '\(context.displayName, privacy: .public)'")
         vpnStatesByProfileID[context.id] = .connecting
         refreshMenu()
 
@@ -45,9 +47,11 @@ extension MenuBarController {
             guard let self else { return }
             switch result {
             case .success:
+                self.logger.info("Connect request accepted for profile '\(context.displayName, privacy: .public)'")
                 self.refreshMenu()
             case .failure(let error):
                 let detail = self.detailedError(error)
+                self.logger.error("Connect failed for profile '\(context.displayName, privacy: .public)': \(detail, privacy: .public)")
                 self.vpnStatesByProfileID[context.id] = .failed(detail)
                 self.notifier.notifyVPNFailed(profileName: context.displayName, message: detail)
                 self.presentAlert(title: "VPN Connection Failed", message: detail)
@@ -57,14 +61,17 @@ extension MenuBarController {
     }
 
     func disconnectProfile(with context: ProfileActionContext) {
+        logger.info("Disconnecting profile '\(context.displayName, privacy: .public)'")
         disconnectingProfileIDs.insert(context.id)
         vpnConnectionStore.disconnect(profileID: context.id) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success:
+                self.logger.info("Disconnect request accepted for profile '\(context.displayName, privacy: .public)'")
                 self.vpnStatesByProfileID[context.id] = .disconnecting
                 self.refreshMenu()
             case .failure(let error):
+                self.logger.error("Disconnect failed for profile '\(context.displayName, privacy: .public)': \(error.localizedDescription, privacy: .public)")
                 self.disconnectingProfileIDs.remove(context.id)
                 self.vpnStatesByProfileID[context.id] = .failed(error.localizedDescription)
                 self.notifier.notifyVPNFailed(profileName: context.displayName, message: error.localizedDescription)

@@ -3,6 +3,7 @@
 
 #include <client/ovpncli.cpp>
 #include <openvpn/crypto/data_epoch.cpp>
+#include <openvpn/tun/extern/config.hpp>
 #include <openvpn/tun/client/tunprop.hpp>
 
 #include <atomic>

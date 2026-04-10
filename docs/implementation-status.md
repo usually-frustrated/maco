@@ -144,6 +144,8 @@ Key files:
 - The connection flow now shows `Connecting` immediately in the menu, and the tunnel startup path no longer hits the earlier settings timeout in the latest repro.
 - VPN Settings now shows the app icon from the extension bundle as well as the app bundle.
 - Release signing has been moved to automatic distribution-oriented settings for archive-ready builds, but App Store upload still needs to be finished through Xcode Organizer with the developer account and provisioning profiles that match the Network Extension capability.
+- The app and packet tunnel entitlements now explicitly declare `com.apple.developer.networking.networkextension` with `packet-tunnel-provider-systemextension`, which matches the current system-extension target model.
+- The app target also now explicitly declares `com.apple.developer.networking.vpn.api` for the `NETunnelProviderManager` save/load path.
 - The app icon path now resolves from the `Assets.xcassets` `AppIcon` asset instead of the legacy `.icns` loader.
 - The menu bar now uses the Unicode glyph `⦼` with light padding instead of an image icon.
 - `MenuBarController.swift` has been split into smaller extension files to keep individual files near the repo's size target.
@@ -184,6 +186,7 @@ Key files:
   - immediate `Connecting` UI state on connect start
   - backgrounded packet-tunnel startup to avoid tunnel-settings timeout
   - extension bundle icon metadata and resource copy for VPN Settings
+  - App Store Network Extension entitlement wiring plus post-save preferences verification
 
 ## Notes For The Next Session
 
